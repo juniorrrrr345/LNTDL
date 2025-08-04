@@ -109,12 +109,3 @@ export async function POST(request: NextRequest) {
 
 export const runtime = 'nodejs';
 export const maxDuration = 60; // 60 secondes pour les vidéos
-
-// Configuration pour augmenter la limite de taille
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '200mb',
-    },
-  },
-};
