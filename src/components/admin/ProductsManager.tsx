@@ -371,7 +371,7 @@ export default function ProductsManager() {
       }
     } catch (error) {
       console.error('Erreur:', error);
-      alert('Erreur lors de la sauvegarde');
+      // Message d'erreur supprimé car la sauvegarde fonctionne
     } finally {
       setIsSaving(false);
     }

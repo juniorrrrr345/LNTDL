@@ -57,6 +57,7 @@ export async function GET() {
       backgroundImage: '',
       backgroundOpacity: 20,
       backgroundBlur: 5,
+      orderLink: '',
       whatsappLink: '',
       whatsappOrderLink: '',
       email: '',

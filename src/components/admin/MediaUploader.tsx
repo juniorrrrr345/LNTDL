@@ -23,7 +23,7 @@ export default function MediaUploader({
 
     // Vérifier la taille selon le type de fichier
     const isVideo = file.type.startsWith('video/');
-    const actualMaxSize = isVideo ? 10 : 5; // 10MB pour vidéos, 5MB pour images
+    const actualMaxSize = isVideo ? 150 : 10; // 150MB pour vidéos, 10MB pour images
     const maxBytes = actualMaxSize * 1024 * 1024;
     
     if (file.size > maxBytes) {
@@ -110,10 +110,10 @@ export default function MediaUploader({
         
         <span className="text-sm text-gray-400">
           {acceptedTypes.includes('video') && acceptedTypes.includes('image') 
-            ? 'Images (5MB) & Vidéos (10MB) - MP4, MOV, WebM'
+            ? 'Images (10MB) & Vidéos (150MB) - MP4, MOV, WebM'
             : acceptedTypes.includes('video')
-            ? 'Vidéos (max 10MB) - MP4, MOV, WebM'
-            : 'Images (max 5MB) - JPG, PNG, WebP'
+            ? 'Vidéos (max 150MB) - MP4, MOV, WebM'
+            : 'Images (max 10MB) - JPG, PNG, WebP'
           }
         </span>
       </div>

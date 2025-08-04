@@ -2,7 +2,7 @@
 
 interface ContactPageProps {
   content: string;
-  whatsappLink: string;
+
   socialLinks: Array<{
     name: string;
     url: string;
@@ -11,7 +11,7 @@ interface ContactPageProps {
   }>;
 }
 
-export default function ContactPage({ content, whatsappLink, socialLinks }: ContactPageProps) {
+export default function ContactPage({ content, socialLinks }: ContactPageProps) {
   const parseMarkdown = (text: string) => {
     return text
       .replace(/^# (.+)$/gm, '<h1 class="text-2xl sm:text-3xl font-bold text-white mb-6 text-center">$1</h1>')
@@ -67,23 +67,10 @@ export default function ContactPage({ content, whatsappLink, socialLinks }: Cont
         </div>
       )}
 
-      {/* Bouton WhatsApp si disponible */}
-      {whatsappLink && (
-        <div className="text-center">
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center space-x-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full text-lg font-bold transition-all duration-200 transform hover:scale-105 shadow-lg"
-          >
-            <span className="text-2xl">💬</span>
-            <span>Contactez-nous sur WhatsApp</span>
-          </a>
-        </div>
-      )}
+
 
       {/* Si aucun contenu n'est disponible */}
-      {!content && !socialLinks.length && !whatsappLink && (
+      {!content && !socialLinks.length && (
         <div className="text-center text-gray-500 py-12">
           <p>Aucun contenu disponible</p>
         </div>

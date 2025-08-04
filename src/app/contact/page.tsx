@@ -15,14 +15,14 @@ async function getContactData() {
     
     return {
       content: page?.content || '',
-      whatsappLink: settings?.whatsappLink || '',
+  
       socialLinks: socialLinks || []
     };
   } catch (error) {
     console.error('Erreur chargement contact:', error);
     return {
       content: '',
-      whatsappLink: '',
+  
       socialLinks: []
     };
   }
@@ -30,7 +30,7 @@ async function getContactData() {
 
 export default async function ContactPageRoute() {
   // Charger les données côté serveur
-  const { content, whatsappLink, socialLinks } = await getContactData();
+  const { content, socialLinks } = await getContactData();
 
   return (
     <div className="main-container">
@@ -44,7 +44,7 @@ export default async function ContactPageRoute() {
           <div className="h-4 sm:h-6"></div>
           <ContactPage 
             content={content}
-            whatsappLink={whatsappLink}
+  
             socialLinks={socialLinks}
           />
         </div>

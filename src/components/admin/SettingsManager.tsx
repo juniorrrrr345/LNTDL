@@ -6,7 +6,7 @@ interface Settings {
   shopSubtitle: string;
   bannerText: string;
   loadingText: string;
-  whatsappLink: string;
+  orderLink: string;
 
   titleStyle: string;
   backgroundImage: string;
@@ -21,7 +21,7 @@ export default function SettingsManager() {
     shopSubtitle: '',
     bannerText: '',
     loadingText: '',
-    whatsappLink: '',
+    orderLink: '',
 
     titleStyle: 'glow',
     backgroundImage: '',
@@ -48,7 +48,7 @@ export default function SettingsManager() {
           shopSubtitle: data.shopSubtitle || '',
           bannerText: data.bannerText || '',
           loadingText: data.loadingText || '',
-          whatsappLink: data.whatsappLink || data.telegramLink || '',
+          orderLink: data.orderLink || data.whatsappLink || data.telegramLink || '',
 
           titleStyle: data.titleStyle || 'glow',
           backgroundImage: data.backgroundImage || '',
@@ -168,7 +168,7 @@ export default function SettingsManager() {
                 value={settings.shopTitle}
                 onChange={(e) => updateField('shopTitle', e.target.value)}
                 className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white"
-                placeholder="JBEL INDUSTRY"
+                placeholder="LANATIONDULAIT"
               />
             </div>
 
@@ -195,7 +195,7 @@ export default function SettingsManager() {
               value={settings.loadingText}
               onChange={(e) => updateField('loadingText', e.target.value)}
               className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white"
-                              placeholder="JBEL INDUSTRY Chargement en cours 🚀"
+                              placeholder="LANATIONDULAIT Chargement en cours 🚀"
             />
             <p className="text-xs text-gray-400 mt-1">Ce texte apparaît pendant le chargement de la boutique</p>
           </div>
@@ -224,16 +224,16 @@ export default function SettingsManager() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Lien WhatsApp principal
+                Lien de commande principal
               </label>
               <input
                 type="url"
-                value={settings.whatsappLink}
-                onChange={(e) => updateField('whatsappLink', e.target.value)}
+                value={settings.orderLink}
+                onChange={(e) => updateField('orderLink', e.target.value)}
                 className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white"
-                placeholder="https://wa.me/33612345678"
+                placeholder="https://votre-lien-commande.com"
               />
-              <p className="text-xs text-gray-400 mt-1">Format: https://wa.me/[code pays][numéro]</p>
+              <p className="text-xs text-gray-400 mt-1">Utilisé pour les boutons de commande</p>
             </div>
 
 

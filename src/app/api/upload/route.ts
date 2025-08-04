@@ -47,8 +47,8 @@ export async function POST(request: NextRequest) {
     const isVideo = file.type.startsWith('video/');
     // MongoDB a une limite de 16MB par document
     // Une vidéo en base64 fait ~33% plus gros que le fichier original
-    const maxSize = isVideo ? 10 * 1024 * 1024 : 5 * 1024 * 1024; // 10MB pour vidéos, 5MB pour images
-    const maxSizeText = isVideo ? '10MB' : '5MB';
+    const maxSize = isVideo ? 150 * 1024 * 1024 : 10 * 1024 * 1024; // 150MB pour vidéos, 10MB pour images
+    const maxSizeText = isVideo ? '150MB' : '10MB';
     
     if (file.size > maxSize) {
       console.log('❌ Fichier trop gros:', file.size, 'max:', maxSize);
@@ -152,3 +152,7 @@ export async function POST(request: NextRequest) {
     }, { status: 500 });
   }
 }
+
+// Configuration pour accepter des fichiers plus gros
+export const runtime = 'nodejs';
+export const maxDuration = 60; // 60 secondes pour l'upload de grosses vidéos
