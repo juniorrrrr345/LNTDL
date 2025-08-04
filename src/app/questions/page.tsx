@@ -1,40 +1,39 @@
-import { Metadata } from 'next';
 import QuestionsPage from '@/components/QuestionsPage';
-import { connectToDatabase } from '@/lib/mongodb';
-import Page from '@/models/Page';
+import Header from '@/components/Header';
+import BottomNav from '@/components/BottomNav';
+import { connectToDatabase } from '@/lib/mongodb-fixed';
 
-export const metadata: Metadata = {
-  title: 'Questions - LANATIONDULAIT',
-  description: 'Questions fréquemment posées'
-};
-
-async function getQuestionsData() {
+async function getQuestionsContent() {
   try {
-    await connectToDatabase();
-    const page = await Page.findOne({ slug: 'questions' }).lean();
-    
-    if (!page) {
-      return {
-        title: 'Questions',
-        content: 'Contenu des questions à venir...'
-      };
-    }
-    
-    return {
-      title: page.title,
-      content: page.content
-    };
+    const { db } = await connectToDatabase();
+    const page = await db.collection('pages').findOne({ slug: 'questions' });
+    return page?.content || '';
   } catch (error) {
-    console.error('Erreur chargement page questions:', error);
-    return {
-      title: 'Questions',
-      content: 'Erreur de chargement'
-    };
+    console.error('Erreur chargement questions:', error);
+    return '';
   }
 }
 
 export default async function QuestionsPageRoute() {
-  const questionsData = await getQuestionsData();
-  
-  return <QuestionsPage {...questionsData} />;
+  // Charger le contenu côté serveur
+  const content = await getQuestionsContent();
+
+  return (
+    <div className="main-container">
+      {/* Overlay global toujours présent */}
+      <div className="global-overlay"></div>
+      
+      {/* Contenu principal */}
+      <div className="content-layer">
+        <Header />
+        <div className="pt-12 sm:pt-14">
+          <div className="h-4 sm:h-6"></div>
+          <QuestionsPage content={content} />
+        </div>
+      </div>
+      
+      {/* BottomNav */}
+      <BottomNav />
+    </div>
+  );
 }

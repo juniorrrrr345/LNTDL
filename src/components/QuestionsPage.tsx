@@ -1,108 +1,47 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { ChevronLeftIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
-import contentCache from '@/lib/contentCache';
-
 interface QuestionsPageProps {
-  title: string;
   content: string;
 }
 
-export default function QuestionsPage({ title: initialTitle, content: initialContent }: QuestionsPageProps) {
-  const [title, setTitle] = useState(initialTitle);
-  const [content, setContent] = useState(initialContent);
-
-  useEffect(() => {
-    // Charger depuis le cache si disponible
-    const cachedPage = contentCache.getPage('questions');
-    if (cachedPage) {
-      setTitle(cachedPage.title);
-      setContent(cachedPage.content);
-    }
-
-    // Écouter les mises à jour du cache
-    const handleCacheUpdate = () => {
-      const updatedPage = contentCache.getPage('questions');
-      if (updatedPage) {
-        setTitle(updatedPage.title);
-        setContent(updatedPage.content);
-      }
-    };
-
-    window.addEventListener('cacheUpdated', handleCacheUpdate);
-    return () => window.removeEventListener('cacheUpdated', handleCacheUpdate);
-  }, []);
+export default function QuestionsPage({ content }: QuestionsPageProps) {
+  const parseMarkdown = (text: string) => {
+    return text
+      .replace(/^# (.+)$/gm, '<h1 class="text-2xl sm:text-3xl font-bold text-white mb-6 text-center">$1</h1>')
+      .replace(/^## (.+)$/gm, '<h2 class="text-xl sm:text-2xl font-bold text-white mb-4 mt-8">$1</h2>')
+      .replace(/^### (.+)$/gm, '<h3 class="text-lg sm:text-xl font-bold text-white mb-3 mt-6">$1</h3>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong class="font-bold text-white">$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em class="italic text-gray-300">$1</em>')
+      .replace(/^- (.+)$/gm, '<li class="ml-4 text-gray-300 mb-1">• $1</li>')
+      .replace(/^(\d+)\. (.+)$/gm, '<li class="ml-4 text-gray-300 mb-1">$1. $2</li>')
+      .replace(/`(.+?)`/g, '<code class="bg-gray-800 px-2 py-1 rounded text-green-400">$1</code>')
+      .replace(/\n\n/g, '<br/><br/>')
+      .replace(/\n/g, '<br/>');
+  };
 
   return (
-    <div className="main-container">
-      <div className="global-overlay"></div>
-      <div className="content-layer">
-        <div className="min-h-screen">
-          {/* Header avec navigation */}
-          <div className="sticky top-0 z-20 bg-black/80 backdrop-blur-xl border-b border-gray-800">
-            <div className="container mx-auto px-4">
-              <div className="flex items-center justify-between h-16">
-                <Link 
-                  href="/" 
-                  className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
-                >
-                  <ChevronLeftIcon className="w-5 h-5" />
-                  <span>Retour</span>
-                </Link>
-                
-                <h1 className="text-xl font-bold text-white">Questions</h1>
-                
-                <div className="w-20"></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Contenu principal avec padding pour éviter que le footer cache le texte */}
-          <div className="container mx-auto px-4 py-8 pb-24 sm:pb-20">
-            <div className="max-w-4xl mx-auto">
-              {/* Icône et titre */}
-              <div className="text-center mb-8">
-                <QuestionMarkCircleIcon className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h2 className="text-3xl font-bold text-white mb-2">{title}</h2>
-              </div>
-
-              {/* Contenu */}
-              <div className="bg-black/50 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-gray-800">
-                <div 
-                  className="prose prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br />') }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Footer navigation fixe */}
-          <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-xl border-t border-gray-800 z-30">
-            <div className="container mx-auto px-4">
-              <div className="flex justify-around py-3">
-                <Link href="/" className="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-colors">
-                  <div className="w-6 h-6 bg-gray-700 rounded"></div>
-                  <span className="text-xs">Accueil</span>
-                </Link>
-                <Link href="/info" className="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-colors">
-                  <div className="w-6 h-6 bg-gray-700 rounded"></div>
-                  <span className="text-xs">Info</span>
-                </Link>
-                <Link href="/contact" className="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-colors">
-                  <div className="w-6 h-6 bg-gray-700 rounded"></div>
-                  <span className="text-xs">Contact</span>
-                </Link>
-                <Link href="/questions" className="flex flex-col items-center gap-1 text-white">
-                  <QuestionMarkCircleIcon className="w-6 h-6" />
-                  <span className="text-xs">Questions</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="container mx-auto px-4 py-8 pb-24 sm:pb-20 max-w-4xl">
+      {/* Titre de la page avec style boutique */}
+      <div className="text-center mb-8">
+        <h1 className="shop-title text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-3">
+          Questions
+        </h1>
+        <div className="w-20 h-0.5 bg-gradient-to-r from-green-500 to-blue-500 mx-auto"></div>
       </div>
+
+      {/* Affichage instantané du contenu */}
+      {content ? (
+        <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/10">
+          <div 
+            className="prose prose-lg max-w-none text-gray-300 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: parseMarkdown(content) }}
+          />
+        </div>
+      ) : (
+        <div className="text-center text-gray-500 py-12">
+          <p>Aucun contenu disponible</p>
+        </div>
+      )}
     </div>
   );
 }

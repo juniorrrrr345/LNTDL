@@ -75,7 +75,8 @@ export default function PagesManager() {
       // Définir des valeurs par défaut en cas d'erreur
       setPageContent({
         info: { title: 'À propos', content: '' },
-        contact: { title: 'Contact', content: '' }
+        contact: { title: 'Contact', content: '' },
+        questions: { title: 'Questions', content: '' }
       });
       
       setTimeout(() => setSaveStatus(''), 3000);
