@@ -34,16 +34,23 @@ class ContentCache {
     
     try {
       // Charger TOUT depuis l'API en parallèle
-      const [products, categories, farms, settings, socialLinks, pages] = await Promise.all([
+      const [products, categories, farms, settings, socialLinks, infoPage, contactPage, questionsPage] = await Promise.all([
         fetch('/api/products', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
         fetch('/api/categories', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
         fetch('/api/farms', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
         fetch('/api/settings', { cache: 'no-store' }).then(r => r.ok ? r.json() : {}),
         fetch('/api/social-links', { cache: 'no-store' }).then(r => r.ok ? r.json() : []),
-        fetch('/api/pages', { cache: 'no-store' }).then(r => r.ok ? r.json() : [])
+        fetch('/api/pages/info', { cache: 'no-store' }).then(r => r.ok ? r.json() : { content: '', title: 'Info' }),
+        fetch('/api/pages/contact', { cache: 'no-store' }).then(r => r.ok ? r.json() : { content: '', title: 'Contact' }),
+        fetch('/api/pages/questions', { cache: 'no-store' }).then(r => r.ok ? r.json() : { content: '', title: 'Questions' })
       ]);
       
       // Mettre à jour le cache ET localStorage
+      const pages = {
+        info: infoPage,
+        contact: contactPage,
+        questions: questionsPage
+      };
       this.data = { products, categories, farms, settings, socialLinks, pages };
       
       // Sauvegarder dans localStorage pour affichage instantané
@@ -52,7 +59,9 @@ class ContentCache {
       localStorage.setItem('farms', JSON.stringify(farms));
       localStorage.setItem('shopSettings', JSON.stringify(settings));
       localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
-      localStorage.setItem('pages', JSON.stringify(pages));
+      localStorage.setItem('infoPage', JSON.stringify(infoPage));
+      localStorage.setItem('contactPage', JSON.stringify(contactPage));
+      localStorage.setItem('questionsPage', JSON.stringify(questionsPage));
       
       // Émettre un événement pour notifier les composants
       window.dispatchEvent(new CustomEvent('cacheUpdated', { detail: this.data }));
