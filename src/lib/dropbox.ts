@@ -4,18 +4,23 @@ import fetch from 'isomorphic-fetch';
 // Configuration Dropbox
 const config = {
   accessToken: process.env.DROPBOX_ACCESS_TOKEN || '',
+  refreshToken: process.env.DROPBOX_REFRESH_TOKEN || '',
   clientId: process.env.DROPBOX_APP_KEY || '',
   clientSecret: process.env.DROPBOX_APP_SECRET || '',
 };
 
 console.log('🔧 Configuration Dropbox chargée:', {
   accessToken: config.accessToken ? 'OK' : 'MANQUANT',
+  refreshToken: config.refreshToken ? 'OK' : 'MANQUANT',
   clientId: config.clientId ? `${config.clientId.substring(0, 6)}...` : 'MANQUANT',
   clientSecret: config.clientSecret ? 'OK' : 'MANQUANT'
 });
 
-// Initialiser le client Dropbox
+// Initialiser le client Dropbox avec refresh token
 const dbx = new Dropbox({
+  clientId: config.clientId,
+  clientSecret: config.clientSecret,
+  refreshToken: config.refreshToken,
   accessToken: config.accessToken,
   fetch: fetch
 });
