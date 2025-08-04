@@ -1037,7 +1037,7 @@ export default function ProductsManager() {
                       Image du produit {formData.image && <span className="text-green-400">✅ Image ajoutée</span>}
                     </label>
                     
-                    {/* Upload depuis la galerie téléphone */}
+                    {/* Upload depuis la galerie téléphone vers Cloudinary */}
                     <div className="mb-4">
                       <GalleryUploader
                         onMediaSelected={(url, type) => {
@@ -1093,7 +1093,7 @@ export default function ProductsManager() {
                       Vidéo du produit (optionnel) {formData.video && <span className="text-green-400">✅ Vidéo ajoutée</span>}
                     </label>
                     
-                    {/* Upload depuis la galerie téléphone */}
+                    {/* Upload depuis la galerie téléphone vers Cloudinary */}
                     <div className="mb-4">
                       <GalleryUploader
                         onMediaSelected={(url, type) => {
