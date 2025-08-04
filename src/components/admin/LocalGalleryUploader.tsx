@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 
-interface SimpleGalleryUploaderProps {
+interface LocalGalleryUploaderProps {
   onMediaSelected: (url: string, type: 'image' | 'video') => void;
   acceptedTypes?: string;
   maxSize?: number;
@@ -9,13 +9,13 @@ interface SimpleGalleryUploaderProps {
   buttonText?: string;
 }
 
-export default function SimpleGalleryUploader({ 
+export default function LocalGalleryUploader({ 
   onMediaSelected, 
   acceptedTypes = "image/*,video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv",
   maxSize = 50,
   className = "",
   buttonText = "📱 Sélectionner depuis la galerie"
-}: SimpleGalleryUploaderProps) {
+}: LocalGalleryUploaderProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [progress, setProgress] = useState('');
@@ -42,52 +42,32 @@ export default function SimpleGalleryUploader({
         size: file.size
       });
 
-      // Upload vers Dropbox (avec fallback)
-      setProgress('Upload en cours...');
-      const formData = new FormData();
-      formData.append('file', file);
+      // Créer une URL locale directement
+      setProgress('Création de l\'aperçu...');
+      const localUrl = URL.createObjectURL(file);
       
       // Détecter le type
       const isVideo = file.type.startsWith('video/') || 
                      ['.mov', '.mp4', '.avi', '.3gp', '.webm', '.mkv'].some(ext => 
                        file.name.toLowerCase().endsWith(ext)
                      );
-      formData.append('type', isVideo ? 'video' : 'image');
-
-      try {
-        // Essayer d'abord l'upload Dropbox
-        const response = await fetch('/api/upload-dropbox', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          console.log('✅ Upload Dropbox réussi:', result);
-          setProgress('Préparation de l\'aperçu...');
-          onMediaSelected(result.url, result.resourceType);
-        } else {
-          // Si Dropbox échoue, créer une URL locale temporaire
-          console.warn('⚠️ Upload Dropbox échoué, création URL locale');
-          const localUrl = URL.createObjectURL(file);
-          const fileType = isVideo ? 'video' : 'image';
-          onMediaSelected(localUrl, fileType);
-        }
-      } catch (error) {
-        // En cas d'erreur, créer une URL locale temporaire
-        console.warn('⚠️ Erreur upload, création URL locale:', error);
-        const localUrl = URL.createObjectURL(file);
-        const fileType = isVideo ? 'video' : 'image';
-        onMediaSelected(localUrl, fileType);
-      }
+      
+      const fileType = isVideo ? 'video' : 'image';
+      
+      console.log('✅ URL locale créée:', localUrl, 'Type:', fileType);
+      
+      setProgress('Préparation de l\'aperçu...');
+      
+      // Utiliser l'URL locale
+      onMediaSelected(localUrl, fileType);
       
       // Reset l'input
       event.target.value = '';
       setProgress('✅ Terminé !');
       
     } catch (error) {
-      console.error('❌ Erreur upload galerie:', error);
-      setError(error instanceof Error ? error.message : 'Erreur upload inconnue');
+      console.error('❌ Erreur création URL locale:', error);
+      setError(error instanceof Error ? error.message : 'Erreur création aperçu');
     } finally {
       setUploading(false);
       setTimeout(() => setProgress(''), 2000);
@@ -95,11 +75,11 @@ export default function SimpleGalleryUploader({
   };
 
   return (
-    <div className={`simple-gallery-uploader ${className}`}>
+    <div className={`local-gallery-uploader ${className}`}>
       <div className="flex items-center gap-2">
         <label className={`
-          inline-flex items-center px-4 py-2 border border-green-600 rounded-lg 
-          bg-green-700 hover:bg-green-600 text-white cursor-pointer transition-colors
+          inline-flex items-center px-4 py-2 border border-purple-600 rounded-lg 
+          bg-purple-700 hover:bg-purple-600 text-white cursor-pointer transition-colors
           ${uploading ? 'opacity-50 cursor-not-allowed' : ''}
         `}>
           <input
@@ -112,7 +92,7 @@ export default function SimpleGalleryUploader({
           {uploading ? (
             <>
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-              <span className="text-sm">Upload...</span>
+              <span className="text-sm">Création...</span>
             </>
           ) : (
             <>
@@ -124,7 +104,7 @@ export default function SimpleGalleryUploader({
       </div>
 
       {progress && (
-        <div className="mt-2 text-xs text-green-400">
+        <div className="mt-2 text-xs text-purple-400">
           {progress}
         </div>
       )}
@@ -136,9 +116,9 @@ export default function SimpleGalleryUploader({
       )}
 
       <div className="mt-2 text-xs text-gray-400">
-        📱 Sélectionnez depuis votre galerie téléphone → Upload Dropbox ou local → Aperçu immédiat
+        📱 Sélectionnez depuis votre galerie téléphone → Aperçu local immédiat
         <br />
-        <span className="text-blue-400">💡 Vous pouvez remplacer les médias existants</span>
+        <span className="text-purple-400">💡 Aperçu temporaire - Sauvegardez pour conserver</span>
       </div>
     </div>
   );

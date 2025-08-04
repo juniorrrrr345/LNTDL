@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import GalleryUploader from './GalleryUploader';
 import SimpleGalleryUploader from './SimpleGalleryUploader';
+import LocalGalleryUploader from './LocalGalleryUploader';
 
 interface Product {
   _id?: string;
@@ -1040,7 +1041,7 @@ export default function ProductsManager() {
                     
                     {/* Upload depuis la galerie téléphone */}
                     <div className="mb-4">
-                      <SimpleGalleryUploader
+                      <LocalGalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'image') {
                             updateField('image', url);
@@ -1096,7 +1097,7 @@ export default function ProductsManager() {
                     
                     {/* Upload depuis la galerie téléphone */}
                     <div className="mb-4">
-                      <SimpleGalleryUploader
+                      <LocalGalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'video') {
                             updateField('video', url);
