@@ -1081,11 +1081,16 @@ export default function ProductsManager() {
                         <div className="text-xs text-gray-400 mb-2">Aperçu :</div>
                         <video 
                           src={formData.video} 
-                          className="w-32 h-20 object-cover rounded border border-white/20"
+                          className="w-full max-w-xs h-40 object-contain bg-black rounded border border-white/20"
                           controls
                           muted
+                          playsInline
                           onError={(e) => {
-                            e.currentTarget.style.display = 'none';
+                            console.error('Erreur de chargement vidéo:', formData.video);
+                            const container = e.currentTarget.parentElement;
+                            if (container) {
+                              container.innerHTML = '<div class="text-red-400 text-sm p-4 bg-red-900/20 rounded">⚠️ Erreur de chargement de la vidéo</div>';
+                            }
                           }}
                         />
                       </div>
@@ -1309,9 +1314,20 @@ export default function ProductsManager() {
                       {formData.video && (
                         <video 
                           src={formData.video} 
-                          className="w-32 h-20 object-cover rounded border border-white/20 mt-2"
+                          className="w-full max-w-xs h-32 object-contain bg-black rounded border border-white/20 mt-2"
                           controls
                           muted
+                          playsInline
+                          onError={(e) => {
+                            console.error('Erreur vidéo modal:', formData.video);
+                            const container = e.currentTarget.parentElement;
+                            if (container) {
+                              const errorDiv = document.createElement('div');
+                              errorDiv.className = 'text-red-400 text-sm p-2 bg-red-900/20 rounded mt-2';
+                              errorDiv.textContent = '⚠️ Erreur vidéo';
+                              e.currentTarget.replaceWith(errorDiv);
+                            }
+                          }}
                         />
                       )}
                     </div>
