@@ -10,6 +10,7 @@
     "setup-new-shop": "node scripts/duplicate-setup.js"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "dropbox": "^10.34.0",
     "isomorphic-fetch": "^3.0.0",
     "mongodb": "^6.18.0",

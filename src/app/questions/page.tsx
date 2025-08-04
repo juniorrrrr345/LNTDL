@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import QuestionsPage from '@/components/QuestionsPage';
-import connectDB from '@/lib/mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
 import Page from '@/models/Page';
 
 export const metadata: Metadata = {
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 async function getQuestionsData() {
   try {
-    await connectDB();
+    await connectToDatabase();
     const page = await Page.findOne({ slug: 'questions' }).lean();
     
     if (!page) {

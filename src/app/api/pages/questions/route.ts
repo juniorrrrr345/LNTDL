@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
 import Page from '@/models/Page';
 
 export async function GET() {
   try {
-    await connectDB();
+    await connectToDatabase();
     
     let page = await Page.findOne({ slug: 'questions' });
     
@@ -32,7 +32,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    await connectDB();
+    await connectToDatabase();
     
     const { title, content } = await request.json();
     
