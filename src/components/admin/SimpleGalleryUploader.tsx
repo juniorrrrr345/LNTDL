@@ -92,7 +92,6 @@ export default function SimpleGalleryUploader({
             accept={acceptedTypes}
             onChange={handleFileSelect}
             disabled={uploading}
-            capture="environment"
           />
           {uploading ? (
             <>
@@ -122,6 +121,8 @@ export default function SimpleGalleryUploader({
 
       <div className="mt-2 text-xs text-gray-400">
         📱 Sélectionnez depuis votre galerie téléphone → Upload local → Aperçu immédiat
+        <br />
+        <span className="text-blue-400">💡 Vous pouvez remplacer les médias existants</span>
       </div>
     </div>
   );

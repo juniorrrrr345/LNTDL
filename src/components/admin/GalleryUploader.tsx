@@ -112,7 +112,6 @@ export default function GalleryUploader({
             accept={acceptedTypes}
             onChange={handleFileSelect}
             disabled={uploading}
-            capture="environment"
           />
           {uploading ? (
             <>

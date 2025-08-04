@@ -1038,9 +1038,9 @@ export default function ProductsManager() {
                       Image du produit {formData.image && <span className="text-green-400">✅ Image ajoutée</span>}
                     </label>
                     
-                    {/* Upload depuis la galerie téléphone vers Dropbox */}
+                    {/* Upload depuis la galerie téléphone */}
                     <div className="mb-4">
-                      <GalleryUploader
+                      <SimpleGalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'image') {
                             updateField('image', url);
@@ -1067,7 +1067,16 @@ export default function ProductsManager() {
                     {/* Préview de l'image */}
                     {formData.image && (
                       <div className="mt-3">
-                        <div className="text-xs text-gray-400 mb-2">Aperçu :</div>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="text-xs text-gray-400">Aperçu :</div>
+                          <button
+                            type="button"
+                            onClick={() => updateField('image', '')}
+                            className="text-xs text-red-400 hover:text-red-300 bg-red-900/20 px-2 py-1 rounded"
+                          >
+                            🗑️ Supprimer
+                          </button>
+                        </div>
                         <img 
                           src={formData.image} 
                           alt="Aperçu" 
@@ -1085,9 +1094,9 @@ export default function ProductsManager() {
                       Vidéo du produit (optionnel) {formData.video && <span className="text-green-400">✅ Vidéo ajoutée</span>}
                     </label>
                     
-                    {/* Upload depuis la galerie téléphone vers Dropbox */}
+                    {/* Upload depuis la galerie téléphone */}
                     <div className="mb-4">
-                      <GalleryUploader
+                      <SimpleGalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'video') {
                             updateField('video', url);
@@ -1114,7 +1123,16 @@ export default function ProductsManager() {
                     {/* Préview de la vidéo */}
                     {formData.video && (
                       <div className="mt-3">
-                        <div className="text-xs text-gray-400 mb-2">Aperçu :</div>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="text-xs text-gray-400">Aperçu :</div>
+                          <button
+                            type="button"
+                            onClick={() => updateField('video', '')}
+                            className="text-xs text-red-400 hover:text-red-300 bg-red-900/20 px-2 py-1 rounded"
+                          >
+                            🗑️ Supprimer
+                          </button>
+                        </div>
                         <video 
                           src={formData.video} 
                           className="w-full max-w-xs h-40 object-contain bg-black rounded border border-white/20"
