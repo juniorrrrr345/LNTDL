@@ -64,12 +64,12 @@ export default function CategoryFilter({
           </button>
           
           {showCategories && (
-            <div className="absolute top-full left-0 right-0 mt-3 bg-gradient-to-b from-gray-900 to-black backdrop-blur-2xl rounded-2xl shadow-2xl z-[9999] border border-blue-500/20 overflow-hidden animate-fadeIn">
+            <div className="absolute top-full left-0 right-0 mt-3 bg-black/70 backdrop-blur-xl rounded-2xl shadow-2xl z-[9999] border border-white/30 overflow-hidden animate-fadeIn">
               {/* En-tête du dropdown */}
-              <div className="px-5 py-4 bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-b border-blue-500/20">
+              <div className="px-5 py-4 bg-white/10 border-b border-white/20">
                 <div className="flex items-center justify-between">
-                  <span className="text-white font-bold text-base">Catégories</span>
-                  <span className="text-blue-400 text-sm font-medium bg-blue-500/20 px-2 py-1 rounded-lg">{categories.length - 1}</span>
+                  <span className="text-white font-bold text-base drop-shadow-lg">Catégories</span>
+                  <span className="text-white text-sm font-medium bg-white/20 px-2 py-1 rounded-lg">{categories.length - 1}</span>
                 </div>
               </div>
               
@@ -82,8 +82,8 @@ export default function CategoryFilter({
                       onCategoryChange(category);
                       setShowCategories(false);
                     }}
-                    className={`w-full text-left px-5 py-4 text-sm text-white hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-purple-600/20 transition-all duration-200 border-b border-gray-800/50 last:border-b-0 group ${
-                      selectedCategory === category ? 'bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-l-4 border-l-blue-500' : ''
+                    className={`w-full text-left px-5 py-4 text-sm text-white hover:bg-white/20 transition-all duration-200 border-b border-white/10 last:border-b-0 group ${
+                      selectedCategory === category ? 'bg-white/20 border-l-4 border-l-white' : ''
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -126,12 +126,12 @@ export default function CategoryFilter({
           </button>
           
           {showFarms && (
-            <div className="absolute top-full left-0 right-0 mt-3 bg-gradient-to-b from-gray-900 to-black backdrop-blur-2xl rounded-2xl shadow-2xl z-[9999] border border-green-500/20 overflow-hidden animate-fadeIn">
+            <div className="absolute top-full left-0 right-0 mt-3 bg-black/70 backdrop-blur-xl rounded-2xl shadow-2xl z-[9999] border border-white/30 overflow-hidden animate-fadeIn">
               {/* En-tête du dropdown */}
-              <div className="px-5 py-4 bg-gradient-to-r from-green-600/30 to-emerald-600/30 border-b border-green-500/20">
+              <div className="px-5 py-4 bg-white/10 border-b border-white/20">
                 <div className="flex items-center justify-between">
-                  <span className="text-white font-bold text-base">Farms</span>
-                  <span className="text-green-400 text-sm font-medium bg-green-500/20 px-2 py-1 rounded-lg">{farms.length - 1}</span>
+                  <span className="text-white font-bold text-base drop-shadow-lg">Farms</span>
+                  <span className="text-white text-sm font-medium bg-white/20 px-2 py-1 rounded-lg">{farms.length - 1}</span>
                 </div>
               </div>
               
@@ -144,8 +144,8 @@ export default function CategoryFilter({
                       onFarmChange(farm);
                       setShowFarms(false);
                     }}
-                    className={`w-full text-left px-5 py-4 text-sm text-white hover:bg-gradient-to-r hover:from-green-600/20 hover:to-emerald-600/20 transition-all duration-200 border-b border-gray-800/50 last:border-b-0 group ${
-                      selectedFarm === farm ? 'bg-gradient-to-r from-green-600/30 to-emerald-600/30 border-l-4 border-l-green-500' : ''
+                    className={`w-full text-left px-5 py-4 text-sm text-white hover:bg-white/20 transition-all duration-200 border-b border-white/10 last:border-b-0 group ${
+                      selectedFarm === farm ? 'bg-white/20 border-l-4 border-l-white' : ''
                     }`}
                   >
                     <div className="flex items-center gap-3">

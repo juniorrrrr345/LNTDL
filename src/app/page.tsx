@@ -23,7 +23,7 @@ export default function HomePage() {
   }, [router]);
   
   // États pour les données - Initialiser avec des valeurs par défaut
-  const [loading, setLoading] = useState(true); // Toujours true au départ
+  const [loading, setLoading] = useState(false); // Pas de loading par défaut // Toujours true au départ
   
   // Gérer la logique de première visite côté client uniquement
   useEffect(() => {
@@ -151,10 +151,8 @@ export default function HomePage() {
     
     loadFreshData();
     
-    // Cacher le chargement après un délai plus long pour être sûr qu'il soit visible
-    const loadingTimeout = setTimeout(() => {
-      setLoading(false);
-    }, 7000); // 7 secondes pour bien voir le chargement
+    // Pas de délai de chargement artificiel
+    setLoading(false);
     
     // Rafraîchir les données toutes les secondes pour synchronisation temps réel
     const interval = setInterval(() => {
@@ -164,7 +162,6 @@ export default function HomePage() {
     // Écouter les changements de paramètres
     
     return () => {
-      clearTimeout(loadingTimeout);
       clearInterval(interval);
     };
   }, []);
