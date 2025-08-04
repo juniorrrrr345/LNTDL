@@ -48,38 +48,31 @@ export default function HybridGalleryUploader({
                        file.name.toLowerCase().endsWith(ext)
                      );
       
-      if (isVideo) {
-        // Pour les vidéos : upload vers Dropbox
-        setProgress('Upload vidéo vers Dropbox...');
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('type', 'video');
+      // Upload vers Dropbox pour tous les médias (images et vidéos)
+      setProgress(`Upload ${isVideo ? 'vidéo' : 'image'} vers Dropbox...`);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('type', isVideo ? 'video' : 'image');
 
-        try {
-          const response = await fetch('/api/upload-dropbox', {
-            method: 'POST',
-            body: formData,
-          });
+      try {
+        const response = await fetch('/api/upload-dropbox', {
+          method: 'POST',
+          body: formData,
+        });
 
-          if (response.ok) {
-            const result = await response.json();
-            console.log('✅ Upload vidéo Dropbox réussi:', result);
-            setProgress('Préparation de l\'aperçu vidéo...');
-            onMediaSelected(result.url, 'video');
-          } else {
-            throw new Error(`Erreur upload vidéo: ${response.status}`);
-          }
-        } catch (uploadError) {
-          console.error('❌ Erreur upload vidéo:', uploadError);
-          setError('Erreur upload vidéo vers Dropbox. Réessayez.');
-          return;
+        if (response.ok) {
+          const result = await response.json();
+          console.log(`✅ Upload ${isVideo ? 'vidéo' : 'image'} Dropbox réussi:`, result);
+          setProgress('Préparation de l\'aperçu...');
+          onMediaSelected(result.url, result.resourceType);
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `Erreur upload: ${response.status}`);
         }
-      } else {
-        // Pour les images : aperçu local
-        setProgress('Création de l\'aperçu image...');
-        const localUrl = URL.createObjectURL(file);
-        console.log('✅ URL locale créée pour image:', localUrl);
-        onMediaSelected(localUrl, 'image');
+      } catch (uploadError) {
+        console.error('❌ Erreur upload Dropbox:', uploadError);
+        setError(`Erreur upload ${isVideo ? 'vidéo' : 'image'} vers Dropbox. Réessayez.`);
+        return;
       }
       
       // Reset l'input
@@ -137,9 +130,9 @@ export default function HybridGalleryUploader({
       )}
 
       <div className="mt-2 text-xs text-gray-400">
-        📱 Images : Aperçu local | Vidéos : Upload Dropbox
+        📱 Upload vers Dropbox pour tous les médias
         <br />
-        <span className="text-orange-400">💡 Système hybride pour compatibilité optimale</span>
+        <span className="text-orange-400">💡 Compatible avec la boutique et les vidéos</span>
       </div>
     </div>
   );
