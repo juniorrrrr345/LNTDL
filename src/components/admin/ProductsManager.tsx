@@ -1308,23 +1308,17 @@ export default function ProductsManager() {
                         Image du produit {formData.image && <span className="text-green-400">✅ Image ajoutée</span>}
                       </label>
                       
-                      {/* Nouvelle galerie Dropbox pour images */}
+                      {/* Upload depuis la galerie téléphone vers Dropbox */}
                       <div className="mb-4">
-                        <DropboxMediaGallery
-                          onMediaChange={(media) => {
-                            if (media.length > 0) {
-                              const imageMedia = media.find(m => m.type === 'image');
-                              if (imageMedia) {
-                                updateField('image', imageMedia.url);
-                              }
+                        <GalleryUploader
+                          onMediaSelected={(url, type) => {
+                            if (type === 'image') {
+                              updateField('image', url);
                             }
                           }}
-                          initialMedia={formData.image ? [{
-                            id: 'current-image',
-                            url: formData.image,
-                            type: 'image',
-                            title: 'Image actuelle'
-                          }] : []}
+                          acceptedTypes="image/*"
+                          maxSize={50}
+                          buttonText="📱 Sélectionner image depuis la galerie"
                         />
                       </div>
                       
@@ -1349,23 +1343,17 @@ export default function ProductsManager() {
                         Vidéo (optionnel) {formData.video && <span className="text-green-400">✅ Vidéo ajoutée</span>}
                       </label>
                       
-                      {/* Nouvelle galerie Dropbox pour vidéos */}
+                      {/* Upload depuis la galerie téléphone vers Dropbox */}
                       <div className="mb-4">
-                        <DropboxMediaGallery
-                          onMediaChange={(media) => {
-                            if (media.length > 0) {
-                              const videoMedia = media.find(m => m.type === 'video');
-                              if (videoMedia) {
-                                updateField('video', videoMedia.url);
-                              }
+                        <GalleryUploader
+                          onMediaSelected={(url, type) => {
+                            if (type === 'video') {
+                              updateField('video', url);
                             }
                           }}
-                          initialMedia={formData.video ? [{
-                            id: 'current-video',
-                            url: formData.video,
-                            type: 'video',
-                            title: 'Vidéo actuelle'
-                          }] : []}
+                          acceptedTypes="video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv"
+                          maxSize={150}
+                          buttonText="📱 Sélectionner vidéo depuis la galerie"
                         />
                       </div>
                       
