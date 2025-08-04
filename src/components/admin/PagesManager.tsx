@@ -146,10 +146,31 @@ export default function PagesManager() {
 
   // Mettre à jour contenu
   const updateContent = (field: 'title' | 'content', value: string) => {
-    setPageContent(prev => ({
-      ...prev,
-      [activeTab]: { ...prev[activeTab], [field]: value }
-    }));
+    setPageContent(prev => {
+      const updated = {
+        ...prev,
+        [activeTab]: { ...prev[activeTab], [field]: value }
+      };
+      
+      // Mettre à jour le cache en temps réel pendant la frappe
+      const pageData = { 
+        title: field === 'title' ? value : prev[activeTab].title,
+        content: field === 'content' ? value : prev[activeTab].content
+      };
+      
+      if (activeTab === 'info') {
+        contentCache.updateInfoPage(pageData);
+      } else if (activeTab === 'contact') {
+        contentCache.updateContactPage(pageData);
+      } else if (activeTab === 'questions') {
+        contentCache.updateQuestionsPage(pageData);
+      }
+      
+      // Déclencher l'événement de mise à jour
+      window.dispatchEvent(new Event('cacheUpdated'));
+      
+      return updated;
+    });
   };
 
   useEffect(() => {
@@ -227,9 +248,14 @@ export default function PagesManager() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-white mb-2">
-            Contenu (Markdown supporté)
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-white">
+              Contenu (Markdown supporté)
+            </label>
+            <span className="text-xs text-green-400 animate-pulse">
+              ✨ Synchronisation en temps réel
+            </span>
+          </div>
           <div className="text-xs text-gray-400 mb-2">
             Utilisez # pour les titres, ** pour le gras, * pour l'italique, - pour les listes
           </div>
