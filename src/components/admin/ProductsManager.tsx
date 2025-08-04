@@ -1,12 +1,6 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import GalleryUploader from './GalleryUploader';
-import SimpleGalleryUploader from './SimpleGalleryUploader';
-import LocalGalleryUploader from './LocalGalleryUploader';
-import HybridGalleryUploader from './HybridGalleryUploader';
-import PersistentGalleryUploader from './PersistentGalleryUploader';
-import SharedGalleryUploader from './SharedGalleryUploader';
-import ImgBBGalleryUploader from './ImgBBGalleryUploader';
 
 interface Product {
   _id?: string;
@@ -1045,14 +1039,14 @@ export default function ProductsManager() {
                     
                     {/* Upload depuis la galerie téléphone */}
                     <div className="mb-4">
-                      <ImgBBGalleryUploader
+                      <GalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'image') {
                             updateField('image', url);
                           }
                         }}
                         acceptedTypes="image/*"
-                        maxSize={32}
+                        maxSize={50}
                         buttonText="📱 Sélectionner image depuis la galerie"
                       />
                     </div>
@@ -1101,14 +1095,14 @@ export default function ProductsManager() {
                     
                     {/* Upload depuis la galerie téléphone */}
                     <div className="mb-4">
-                      <ImgBBGalleryUploader
+                      <GalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'video') {
                             updateField('video', url);
                           }
                         }}
                         acceptedTypes="video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv"
-                        maxSize={32}
+                        maxSize={150}
                         buttonText="📱 Sélectionner vidéo depuis la galerie"
                       />
                     </div>

@@ -42,48 +42,35 @@ export default function GalleryUploader({
         size: file.size
       });
 
-      // Upload local d'abord
-      setProgress('Upload local...');
+      // Upload direct vers Dropbox
+      setProgress('Upload vers Dropbox...');
       const formData = new FormData();
       formData.append('file', file);
       
-      const localResponse = await fetch('/api/upload', {
+      // Détecter le type
+      const isVideo = file.type.startsWith('video/') || 
+                     ['.mov', '.mp4', '.avi', '.3gp', '.webm', '.mkv'].some(ext => 
+                       file.name.toLowerCase().endsWith(ext)
+                     );
+      formData.append('type', isVideo ? 'video' : 'image');
+
+      const response = await fetch('/api/upload-dropbox', {
         method: 'POST',
         body: formData,
       });
 
-      if (!localResponse.ok) {
-        const errorData = await localResponse.json();
-        throw new Error(errorData.error || `Erreur upload local ${localResponse.status}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Erreur HTTP ${response.status}`);
       }
 
-      const localResult = await localResponse.json();
-      console.log('✅ Upload local réussi:', localResult);
+      const result = await response.json();
+      console.log('✅ Upload Dropbox réussi:', result);
       
-      // Maintenant essayer l'upload vers Dropbox
-      setProgress('Upload vers Dropbox...');
-      try {
-        const dropboxResponse = await fetch('/api/upload-dropbox', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (dropboxResponse.ok) {
-          const dropboxResult = await dropboxResponse.json();
-          console.log('✅ Upload Dropbox réussi:', dropboxResult);
-          setProgress('Conversion en lien direct...');
-          onMediaSelected(dropboxResult.url, dropboxResult.resourceType);
-        } else {
-          // Si Dropbox échoue, utiliser l'upload local
-          console.warn('⚠️ Upload Dropbox échoué, utilisation upload local');
-          setProgress('Utilisation upload local...');
-          onMediaSelected(localResult.url, localResult.type);
-        }
-      } catch (dropboxError) {
-        console.warn('⚠️ Erreur Dropbox, utilisation upload local:', dropboxError);
-        setProgress('Utilisation upload local...');
-        onMediaSelected(localResult.url, localResult.type);
-      }
+      setProgress('Conversion en lien direct...');
+      
+      // Le lien Dropbox est déjà converti automatiquement
+      onMediaSelected(result.url, result.resourceType);
       
       // Reset l'input
       event.target.value = '';
@@ -140,7 +127,7 @@ export default function GalleryUploader({
       )}
 
       <div className="mt-2 text-xs text-gray-400">
-        📱 Sélectionnez depuis votre galerie téléphone → Upload local + Dropbox (si disponible) → Lien direct généré
+        📱 Sélectionnez depuis votre galerie téléphone → Upload automatique vers Dropbox → Lien direct généré
       </div>
     </div>
   );
