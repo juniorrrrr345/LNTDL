@@ -1,6 +1,7 @@
 import InfoPage from '@/components/InfoPage';
 import Header from '@/components/Header';
 import BottomNav from '@/components/BottomNav';
+import contentCache from '@/lib/contentCache';
 import { connectToDatabase } from '@/lib/mongodb-fixed';
 
 async function getInfoContent() {

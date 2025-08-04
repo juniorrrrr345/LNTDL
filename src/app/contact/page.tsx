@@ -1,5 +1,6 @@
 import ContactPage from '@/components/ContactPage';
 import Header from '@/components/Header';
+import contentCache from '@/lib/contentCache';
 import BottomNav from '@/components/BottomNav';
 import { connectToDatabase } from '@/lib/mongodb-fixed';
 

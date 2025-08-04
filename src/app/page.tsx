@@ -223,46 +223,48 @@ export default function HomePage() {
         <div className="global-overlay"></div>
         <div className="content-layer">
           <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="text-center bg-black/60 backdrop-blur-md rounded-3xl p-8 sm:p-12 max-w-lg mx-auto border border-white/20">
-              {/* Logo animé moderne */}
-              <div className="mb-8">
-                <div className="relative w-40 h-40 mx-auto">
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full blur-2xl opacity-70 animate-pulse"></div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-full blur-xl opacity-50 animate-ping"></div>
-                  <div className="relative z-10 w-full h-full flex items-center justify-center">
-                    <span className="text-8xl animate-bounce filter drop-shadow-2xl">🔥</span>
-                  </div>
+            <div className="text-center">
+              {/* Animation moderne sans emoji */}
+              <div className="relative mb-12">
+                {/* Cercles animés concentriques */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-64 h-64 border border-white/10 rounded-full animate-spin-slow"></div>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-48 h-48 border-2 border-white/20 rounded-full animate-spin-reverse"></div>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-32 h-32 bg-white/5 backdrop-blur-sm rounded-full animate-pulse"></div>
+                </div>
+                
+                {/* Titre principal avec animation */}
+                <div className="relative z-10 py-16">
+                  <h1 className="text-6xl sm:text-8xl lg:text-9xl font-black text-white tracking-wider">
+                    <span className="block animate-slide-in-top">LANATION</span>
+                    <span className="block animate-slide-in-bottom mt-2">DULAIT</span>
+                  </h1>
                 </div>
               </div>
               
-              {/* Titre avec effet néon et ombre */}
-              <h1 className="text-5xl sm:text-7xl font-black mb-4 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-transparent bg-clip-text animate-pulse drop-shadow-[0_0_30px_rgba(255,255,255,0.5)]">
-                LANATIONDULAIT
-              </h1>
+              {/* Barre de progression minimaliste */}
+              <div className="w-full max-w-xl mx-auto mb-12">
+                <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-full bg-white/80 rounded-full animate-loading-smooth"></div>
+                </div>
+              </div>
               
-              <p className="text-2xl text-white mb-8 font-semibold drop-shadow-lg">
-                Préparation en cours...
+              {/* Indicateur de chargement moderne */}
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-white/70 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-2 h-2 bg-white/50 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                <div className="w-2 h-2 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+              </div>
+              
+              {/* Texte de chargement subtil */}
+              <p className="text-white/60 text-sm tracking-[0.3em] mt-8 animate-fade-in">
+                CHARGEMENT EN COURS
               </p>
-              
-              {/* Nouvelle barre de chargement 3D */}
-              <div className="w-80 max-w-full mx-auto mb-8">
-                <div className="h-4 bg-white/20 rounded-full overflow-hidden border border-white/40 shadow-inner">
-                  <div className="h-full bg-gradient-to-r from-yellow-500 via-orange-500 to-red-600 rounded-full shadow-lg animate-loading-bar"></div>
-                </div>
-                <div className="mt-2 text-sm text-white font-medium drop-shadow-md">Chargement...</div>
-              </div>
-              
-              {/* Animation de particules */}
-              <div className="flex justify-center gap-3 mb-8">
-                <div className="w-3 h-3 bg-yellow-400 rounded-full animate-bounce shadow-lg shadow-yellow-400/50" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce shadow-lg shadow-orange-500/50" style={{ animationDelay: '200ms' }}></div>
-                <div className="w-3 h-3 bg-red-500 rounded-full animate-bounce shadow-lg shadow-red-500/50" style={{ animationDelay: '400ms' }}></div>
-              </div>
-              
-              {/* Footer */}
-              <div className="text-white text-sm font-medium drop-shadow-md">
-                <p>© 2025 JUNIOR X JBEL</p>
-              </div>
             </div>
           </div>
         </div>

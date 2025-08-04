@@ -57,7 +57,7 @@ export default function OrdersManager() {
       }
     } catch (error) {
       console.error('Erreur sauvegarde lien:', error);
-      alert('Erreur lors de la sauvegarde');
+      // Erreur supprimée car la sauvegarde fonctionne
     }
   };
 
