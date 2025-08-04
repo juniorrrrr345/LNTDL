@@ -71,7 +71,31 @@ export default function MediaUploader({
 
       const result = await response.json();
       console.log('✅ Upload réussi:', result);
-      onMediaSelected(result.url, result.type);
+      
+      // Si c'est un upload local, on peut l'uploader vers Dropbox automatiquement
+      if (result.url.startsWith('data:') || result.url.startsWith('/api/')) {
+        try {
+          console.log('🔄 Upload automatique vers Dropbox...');
+          const dropboxResponse = await fetch('/api/upload-dropbox', {
+            method: 'POST',
+            body: formData,
+          });
+          
+          if (dropboxResponse.ok) {
+            const dropboxResult = await dropboxResponse.json();
+            console.log('✅ Upload Dropbox réussi:', dropboxResult);
+            onMediaSelected(dropboxResult.url, result.type);
+          } else {
+            // Si l'upload Dropbox échoue, on utilise l'URL locale
+            onMediaSelected(result.url, result.type);
+          }
+        } catch (dropboxError) {
+          console.warn('⚠️ Upload Dropbox échoué, utilisation URL locale:', dropboxError);
+          onMediaSelected(result.url, result.type);
+        }
+      } else {
+        onMediaSelected(result.url, result.type);
+      }
       
       // Reset l'input
       event.target.value = '';
