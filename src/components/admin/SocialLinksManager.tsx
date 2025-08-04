@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import contentCache from '@/lib/contentCache';
 
 interface SocialLink {
   _id?: string;
@@ -34,8 +35,10 @@ export default function SocialLinksManager() {
       if (response.ok) {
         const data = await response.json();
         setSocialLinks(data);
-        // Sauvegarder dans localStorage pour chargement instantané
-        localStorage.setItem('socialLinks', JSON.stringify(data));
+        // Mettre à jour le contentCache
+        contentCache.updateSocialLinks(data);
+        // Déclencher l'événement de mise à jour
+        window.dispatchEvent(new Event('cacheUpdated'));
       }
     } catch (error) {
       console.error('Erreur chargement liens sociaux:', error);
@@ -131,6 +134,12 @@ export default function SocialLinksManager() {
         });
 
         if (response.ok) {
+          // Mettre à jour le contentCache
+          const updatedLinks = socialLinks.filter(link => link._id !== linkId);
+          contentCache.updateSocialLinks(updatedLinks);
+          // Déclencher l'événement de mise à jour
+          window.dispatchEvent(new Event('cacheUpdated'));
+          
           // Afficher message de succès
           const successMsg = document.createElement('div');
           successMsg.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-[9999] transition-all duration-300';

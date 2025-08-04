@@ -211,6 +211,14 @@ class ContentCache {
     } catch (e) {}
   }
 
+  updateSocialLinks(socialLinks: any[]) {
+    this.data.socialLinks = socialLinks;
+    // Sauvegarder aussi dans localStorage séparément pour chargement instantané
+    try {
+      localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+    } catch (e) {}
+  }
+
   // Invalidate cache - force une nouvelle récupération IMMÉDIATE
   invalidate() {
     console.log('♻️ CACHE INVALIDÉ - Prochaine requête sera ultra-fraîche');
