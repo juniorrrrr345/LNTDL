@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import MediaUploader from './MediaUploader';
 import DropboxUploader from './DropboxUploader';
 import DropboxDiagnostic from './DropboxDiagnostic';
+import DropboxMediaGallery from './DropboxMediaGallery';
 
 interface Product {
   _id?: string;
