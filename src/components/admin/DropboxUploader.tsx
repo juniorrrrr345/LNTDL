@@ -90,6 +90,7 @@ export default function DropboxUploader({
           onChange={handleFileSelect}
           disabled={uploading}
           className="hidden"
+          capture={type === 'video' ? 'environment' : undefined}
         />
         
         {preview ? (

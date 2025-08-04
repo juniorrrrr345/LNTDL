@@ -20,7 +20,8 @@ export async function POST(request: NextRequest) {
     console.log('📁 Fichier reçu:', {
       name: file.name,
       size: file.size,
-      type: file.type
+      type: file.type,
+      sizeInMB: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
     });
 
     const bytes = await file.arrayBuffer();
@@ -45,11 +46,21 @@ export async function POST(request: NextRequest) {
         .toBuffer();
       
       fileName += '.jpg';
-    } else if (type === 'video' && file.type.startsWith('video/')) {
+    } else if (type === 'video') {
       console.log('🎥 Traitement de la vidéo...');
       
+      // Accepter différents types MIME pour les vidéos mobiles
+      const videoTypes = ['video/', 'application/octet-stream', '.mov', '.mp4', '.avi', '.webm'];
+      const isVideo = videoTypes.some(vType => 
+        file.type.includes(vType) || file.name.toLowerCase().includes(vType)
+      );
+      
+      if (!isVideo) {
+        console.warn('⚠️ Type de fichier non reconnu comme vidéo:', file.type);
+      }
+      
       // Pour les vidéos, on garde le format original
-      const extension = file.name.split('.').pop() || 'mp4';
+      const extension = file.name.split('.').pop()?.toLowerCase() || 'mp4';
       fileName += `.${extension}`;
       
       // Vérifier la taille (max 150MB pour Dropbox)
@@ -59,6 +70,11 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+      
+      console.log('📹 Vidéo prête pour upload:', {
+        extension,
+        sizeInMB: (buffer.length / (1024 * 1024)).toFixed(2) + ' MB'
+      });
     } else {
       // Autres fichiers
       const extension = file.name.split('.').pop() || 'bin';
@@ -93,3 +109,12 @@ export async function POST(request: NextRequest) {
 
 export const runtime = 'nodejs';
 export const maxDuration = 60; // 60 secondes pour les vidéos
+
+// Configuration pour augmenter la limite de taille
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '200mb',
+    },
+  },
+};

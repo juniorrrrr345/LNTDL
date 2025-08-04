@@ -1058,7 +1058,7 @@ export default function ProductsManager() {
                               updateField('video', url);
                             }
                           }}
-                          acceptedTypes="video/*"
+                          accept="video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv"
                           maxSize={5} // Très réduit pour éviter erreur 413
                           className="mb-2"
                         />

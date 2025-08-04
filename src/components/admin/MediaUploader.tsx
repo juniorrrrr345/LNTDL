@@ -10,7 +10,7 @@ interface MediaUploaderProps {
 
 export default function MediaUploader({ 
   onMediaSelected, 
-  acceptedTypes = "image/*,video/*,.mov,.avi,.3gp",
+  acceptedTypes = "image/*,video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv",
   maxSize = 10, // Limite par défaut réduite
   className = ""
 }: MediaUploaderProps) {
@@ -22,7 +22,9 @@ export default function MediaUploader({
     if (!file) return;
 
     // Vérifier la taille selon le type de fichier
-    const isVideo = file.type.startsWith('video/');
+    const videoExtensions = ['.mov', '.mp4', '.avi', '.3gp', '.webm', '.mkv'];
+    const isVideo = file.type.startsWith('video/') || 
+                   videoExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
     const actualMaxSize = isVideo ? 150 : 10; // 150MB pour vidéos, 10MB pour images
     const maxBytes = actualMaxSize * 1024 * 1024;
     
