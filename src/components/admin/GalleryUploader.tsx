@@ -42,8 +42,8 @@ export default function GalleryUploader({
         size: file.size
       });
 
-      // Upload direct vers Dropbox
-      setProgress('Upload vers Dropbox...');
+      // Upload direct vers Cloudinary
+      setProgress('Upload vers Cloudinary...');
       const formData = new FormData();
       formData.append('file', file);
       
@@ -54,7 +54,7 @@ export default function GalleryUploader({
                      );
       formData.append('type', isVideo ? 'video' : 'image');
 
-      const response = await fetch('/api/upload-dropbox', {
+      const response = await fetch('/api/upload-cloudinary', {
         method: 'POST',
         body: formData,
       });
@@ -65,11 +65,11 @@ export default function GalleryUploader({
       }
 
       const result = await response.json();
-      console.log('✅ Upload Dropbox réussi:', result);
+      console.log('✅ Upload Cloudinary réussi:', result);
       
-      setProgress('Conversion en lien direct...');
+      setProgress('Préparation de l\'aperçu...');
       
-      // Le lien Dropbox est déjà converti automatiquement
+      // L'URL Cloudinary est déjà optimisée et sécurisée
       onMediaSelected(result.url, result.resourceType);
       
       // Reset l'input
@@ -127,7 +127,7 @@ export default function GalleryUploader({
       )}
 
       <div className="mt-2 text-xs text-gray-400">
-        📱 Sélectionnez depuis votre galerie téléphone → Upload automatique vers Dropbox → Lien direct généré
+        📱 Sélectionnez depuis votre galerie téléphone → Upload automatique vers Cloudinary → URL optimisée générée
       </div>
     </div>
   );
