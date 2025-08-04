@@ -73,6 +73,7 @@ export default function DropboxUploader({
       setProgress('Upload terminé !');
       
       // Appeler le callback avec l'URL
+      console.log('🔗 Appel onUploadSuccess avec URL:', result.url);
       onUploadSuccess(result.url);
       
       // Reset après succès

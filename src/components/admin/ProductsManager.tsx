@@ -200,6 +200,13 @@ export default function ProductsManager() {
 
   const handleSave = async () => {
     console.log('🔵 Bouton sauvegarder cliqué');
+    console.log('📸 État actuel formData:', {
+      name: formData.name,
+      farm: formData.farm,
+      category: formData.category,
+      image: formData.image,
+      video: formData.video
+    });
     
     if (!formData.name || !formData.farm || !formData.category) {
       alert('Veuillez remplir tous les champs obligatoires');
@@ -207,7 +214,8 @@ export default function ProductsManager() {
     }
     
     // Vérifier que nous avons bien une image
-    if (!formData.image) {
+    if (!formData.image || formData.image.trim() === '') {
+      console.error('❌ Pas d\'image trouvée dans formData:', formData.image);
       alert('Veuillez ajouter une image au produit');
       return;
     }
@@ -443,6 +451,7 @@ export default function ProductsManager() {
   };
 
   const updateField = (field: keyof Product, value: any) => {
+    console.log(`📝 UpdateField: ${field} = ${value}`);
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -908,7 +917,7 @@ export default function ProductsManager() {
                         : 'text-gray-400'
                     }`}
                   >
-                    🖼️ Média
+                    🖼️ Média {(formData.image || formData.video) && '✅'}
                   </button>
                   <button
                     onClick={() => setActiveTab('prix')}
@@ -970,7 +979,9 @@ export default function ProductsManager() {
 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Image du produit</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Image du produit {formData.image && <span className="text-green-400">✅ Image ajoutée</span>}
+                    </label>
                     
                     <div className="bg-gray-800/50 border border-white/10 rounded-lg p-4 mb-3">
                       <div className="text-sm text-gray-300 mb-3 font-medium">Choisir la méthode d'upload :</div>
@@ -1031,7 +1042,9 @@ export default function ProductsManager() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Vidéo du produit (optionnel)</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Vidéo du produit (optionnel) {formData.video && <span className="text-green-400">✅ Vidéo ajoutée</span>}
+                    </label>
                     
                     <div className="bg-gray-800/50 border border-white/10 rounded-lg p-4 mb-3">
                       <div className="text-sm text-gray-300 mb-3 font-medium">Choisir la méthode d'upload :</div>
@@ -1269,7 +1282,9 @@ export default function ProductsManager() {
                 {activeTab === 'media' && (
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Image du produit</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Image du produit {formData.image && <span className="text-green-400">✅ Image ajoutée</span>}
+                      </label>
                       <DropboxUploader
                         onUploadSuccess={(url) => {
                           updateField('image', url);
@@ -1295,7 +1310,9 @@ export default function ProductsManager() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Vidéo (optionnel)</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Vidéo (optionnel) {formData.video && <span className="text-green-400">✅ Vidéo ajoutée</span>}
+                      </label>
                       <DropboxUploader
                         onUploadSuccess={(url) => {
                           updateField('video', url);
