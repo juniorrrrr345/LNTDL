@@ -68,32 +68,10 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // Appliquer le background immédiatement depuis localStorage
+              // Appliquer uniquement un fond noir par défaut
               (function() {
                 try {
-                  const settings = localStorage.getItem('shopSettings');
-                  if (settings) {
-                    const parsed = JSON.parse(settings);
-                    if (parsed.backgroundImage) {
-                      const style = document.createElement('style');
-                      style.textContent = \`
-                        html, body, .main-container {
-                          background-image: url(\${parsed.backgroundImage}) !important;
-                          background-size: cover !important;
-                          background-position: center !important;
-                          background-repeat: no-repeat !important;
-                          background-attachment: fixed !important;
-                          background-color: black !important;
-                        }
-                        .global-overlay {
-                          background-color: rgba(0, 0, 0, \${(parsed.backgroundOpacity || 20) / 100}) !important;
-                          backdrop-filter: blur(\${parsed.backgroundBlur || 5}px) !important;
-                        }
-                      \`;
-                      document.head.appendChild(style);
-                    }
-                  }
-                  // Fond noir par défaut
+                  // Fond noir par défaut - le vrai background sera chargé depuis l'API
                   document.documentElement.style.backgroundColor = 'black';
                   document.body.style.backgroundColor = 'black';
                 } catch (e) {}

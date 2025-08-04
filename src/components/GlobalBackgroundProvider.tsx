@@ -55,18 +55,10 @@ export default function GlobalBackgroundProvider() {
       `;
     };
     
-    // 1. Charger depuis localStorage immédiatement
-    try {
-      const cachedSettings = localStorage.getItem('shopSettings');
-      if (cachedSettings) {
-        const settings = JSON.parse(cachedSettings);
-        applyBackground(settings, true);
-      }
-    } catch (e) {
-      console.error('Erreur parsing settings cache:', e);
-    }
+    // 1. Appliquer un background noir par défaut immédiatement
+    applyBackground({}, true);
     
-    // 2. Charger depuis l'API
+    // 2. Charger depuis l'API (priorité absolue)
     let mounted = true;
     fetch('/api/settings', { 
       cache: 'no-store',

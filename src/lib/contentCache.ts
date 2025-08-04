@@ -21,10 +21,28 @@ class ContentCache {
 
   constructor() {
     if (typeof window !== 'undefined') {
+      // Vider le cache localStorage au démarrage pour forcer le chargement frais
+      this.clearLocalStorage();
       // Charger immédiatement depuis l'API
       this.forceRefresh();
       // Rafraîchir très fréquemment
       setInterval(() => this.forceRefresh(), 500); // Toutes les 0.5 secondes
+    }
+  }
+  
+  // Méthode pour vider le localStorage
+  private clearLocalStorage() {
+    try {
+      localStorage.removeItem('products');
+      localStorage.removeItem('categories');
+      localStorage.removeItem('farms');
+      localStorage.removeItem('shopSettings');
+      localStorage.removeItem('socialLinks');
+      localStorage.removeItem('infoPage');
+      localStorage.removeItem('contactPage');
+      localStorage.removeItem('questionsPage');
+    } catch (e) {
+      console.log('Erreur lors du nettoyage du localStorage:', e);
     }
   }
   
@@ -91,16 +109,19 @@ class ContentCache {
 
   // Obtenir les produits instantanément
   getProducts() {
+    // Retourner un tableau vide si pas encore chargé depuis l'API
     return this.data.products || [];
   }
 
   // Obtenir les catégories instantanément
   getCategories() {
+    // Retourner un tableau vide si pas encore chargé depuis l'API
     return this.data.categories || [];
   }
 
   // Obtenir les farms instantanément
   getFarms() {
+    // Retourner un tableau vide si pas encore chargé depuis l'API
     return this.data.farms || [];
   }
 
