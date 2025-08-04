@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb-fixed';
 
 // Configuration Next.js 14 pour les limites de requête
-export const maxDuration = 30; // 30 secondes timeout
+export const maxDuration = 60; // 60 secondes pour l'upload de grosses vidéos
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
@@ -155,4 +155,3 @@ export async function POST(request: NextRequest) {
 
 // Configuration pour accepter des fichiers plus gros
 export const runtime = 'nodejs';
-export const maxDuration = 60; // 60 secondes pour l'upload de grosses vidéos
