@@ -118,6 +118,10 @@ class ContentCache {
     return this.data.pages?.contact || null;
   }
 
+  getQuestionsPage() {
+    return this.data.pages?.questions || null;
+  }
+
   // Updaters pour les pages
   updateInfoPage(page: { title: string; content: string }) {
     if (!this.data.pages) {
@@ -208,13 +212,13 @@ class ContentCache {
 
   // Récupérer les pages
   getPages() {
-    return this.data.pages || [];
+    return this.data.pages || {};
   }
 
   // Récupérer une page spécifique
   getPage(slug: string) {
     const pages = this.getPages();
-    return pages.find((p: any) => p.slug === slug);
+    return pages[slug] || null;
   }
 }
 
