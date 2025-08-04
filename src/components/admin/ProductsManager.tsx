@@ -5,6 +5,7 @@ import SimpleGalleryUploader from './SimpleGalleryUploader';
 import LocalGalleryUploader from './LocalGalleryUploader';
 import HybridGalleryUploader from './HybridGalleryUploader';
 import PersistentGalleryUploader from './PersistentGalleryUploader';
+import SharedGalleryUploader from './SharedGalleryUploader';
 
 interface Product {
   _id?: string;
@@ -1043,7 +1044,7 @@ export default function ProductsManager() {
                     
                     {/* Upload depuis la galerie téléphone */}
                     <div className="mb-4">
-                      <PersistentGalleryUploader
+                      <SharedGalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'image') {
                             updateField('image', url);
@@ -1099,7 +1100,7 @@ export default function ProductsManager() {
                     
                     {/* Upload depuis la galerie téléphone */}
                     <div className="mb-4">
-                      <PersistentGalleryUploader
+                      <SharedGalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'video') {
                             updateField('video', url);
