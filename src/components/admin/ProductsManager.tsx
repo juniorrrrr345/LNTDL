@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import MediaUploader from './MediaUploader';
-import CloudinaryUploader from './CloudinaryUploader';
+import DropboxUploader from './DropboxUploader';
 
 interface Product {
   _id?: string;
@@ -966,16 +966,15 @@ export default function ProductsManager() {
                     <div className="bg-gray-800/50 border border-white/10 rounded-lg p-4 mb-3">
                       <div className="text-sm text-gray-300 mb-3 font-medium">Choisir la méthode d'upload :</div>
                       
-                      {/* Upload Cloudinary (recommandé) */}
+                      {/* Upload Dropbox (recommandé) */}
                       <div className="mb-3">
                         <div className="text-xs text-green-400 mb-2">✅ Recommandé - Hébergement cloud</div>
-                        <CloudinaryUploader
-                          onMediaSelected={(url, type) => {
-                            if (type === 'image') {
-                              updateField('image', url);
-                            }
+                        <DropboxUploader
+                          onUploadSuccess={(url) => {
+                            updateField('image', url);
                           }}
-                          acceptedTypes="image/*"
+                          type="image"
+                          accept="image/*"
                           className="mb-2"
                         />
                       </div>
@@ -1028,16 +1027,15 @@ export default function ProductsManager() {
                     <div className="bg-gray-800/50 border border-white/10 rounded-lg p-4 mb-3">
                       <div className="text-sm text-gray-300 mb-3 font-medium">Choisir la méthode d'upload :</div>
                       
-                      {/* Upload Cloudinary (recommandé pour vidéos) */}
+                      {/* Upload Dropbox (recommandé pour vidéos) */}
                       <div className="mb-3">
                         <div className="text-xs text-green-400 mb-2">✅ Recommandé - Hébergement cloud illimité</div>
-                        <CloudinaryUploader
-                          onMediaSelected={(url, type) => {
-                            if (type === 'video') {
-                              updateField('video', url);
-                            }
+                        <DropboxUploader
+                          onUploadSuccess={(url) => {
+                            updateField('video', url);
                           }}
-                          acceptedTypes="video/*,.mov,.avi,.3gp"
+                          type="video"
+                          accept="video/*,.mov,.avi,.3gp"
                           className="mb-2"
                         />
                       </div>
@@ -1258,13 +1256,12 @@ export default function ProductsManager() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Image du produit</label>
-                      <CloudinaryUploader
-                        onMediaSelected={(url, type) => {
-                          if (type === 'image') {
-                            updateField('image', url);
-                          }
+                      <DropboxUploader
+                        onUploadSuccess={(url) => {
+                          updateField('image', url);
                         }}
-                        acceptedTypes="image/*"
+                        type="image"
+                        accept="image/*"
                         className="mb-3"
                       />
                       <input
@@ -1285,13 +1282,12 @@ export default function ProductsManager() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Vidéo (optionnel)</label>
-                      <CloudinaryUploader
-                        onMediaSelected={(url, type) => {
-                          if (type === 'video') {
-                            updateField('video', url);
-                          }
+                      <DropboxUploader
+                        onUploadSuccess={(url) => {
+                          updateField('video', url);
                         }}
-                        acceptedTypes="video/*"
+                        type="video"
+                        accept="video/*"
                         className="mb-3"
                       />
                       <input
