@@ -75,7 +75,8 @@ export async function POST(request: NextRequest) {
       folder: type === 'video' ? 'videos' : 'images',
       public_id: `${Date.now()}-${Math.random().toString(36).substring(2, 8)}`,
       overwrite: true,
-      invalidate: true
+      invalidate: true,
+      upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET || 'lntdl_media'
     };
 
     const result = await new Promise((resolve, reject) => {
