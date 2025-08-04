@@ -42,7 +42,7 @@ export default function GalleryUploader({
         size: file.size
       });
 
-      // Upload direct vers Cloudinary
+      // Upload direct vers Cloudinary avec synchronisation
       setProgress('Upload vers Cloudinary...');
       const formData = new FormData();
       formData.append('file', file);
@@ -54,7 +54,7 @@ export default function GalleryUploader({
                      );
       formData.append('type', isVideo ? 'video' : 'image');
 
-      const response = await fetch('/api/upload-cloudinary', {
+      const response = await fetch('/api/upload-cloudinary-sync', {
         method: 'POST',
         body: formData,
       });
@@ -65,11 +65,11 @@ export default function GalleryUploader({
       }
 
       const result = await response.json();
-      console.log('✅ Upload Cloudinary réussi:', result);
+      console.log('✅ Upload Cloudinary synchronisé réussi:', result);
       
-      setProgress('Préparation de l\'aperçu...');
+      setProgress('Synchronisation avec le cache...');
       
-      // L'URL Cloudinary est déjà optimisée et sécurisée
+      // L'URL Cloudinary est synchronisée avec MongoDB
       onMediaSelected(result.url, result.resourceType);
       
       // Reset l'input
@@ -127,7 +127,7 @@ export default function GalleryUploader({
       )}
 
       <div className="mt-2 text-xs text-gray-400">
-        📱 Sélectionnez depuis votre galerie téléphone → Upload automatique vers Cloudinary → URL optimisée générée
+        📱 Sélectionnez depuis votre galerie téléphone → Upload Cloudinary + Cache synchronisé → Visible par tous
       </div>
     </div>
   );
