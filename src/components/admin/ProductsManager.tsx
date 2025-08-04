@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import MediaUploader from './MediaUploader';
 import DropboxUploader from './DropboxUploader';
+import DropboxDiagnostic from './DropboxDiagnostic';
 
 interface Product {
   _id?: string;
@@ -741,6 +742,9 @@ export default function ProductsManager() {
         </div>
         </div>
       </div>
+
+      {/* Diagnostic Dropbox */}
+      <DropboxDiagnostic className="mb-6" />
 
       {/* Alerte pour les prix problématiques */}
       {products.some(p => Object.values(p.prices || {}).some(price => !price || isNaN(Number(price)) || Number(price) <= 0)) && (
