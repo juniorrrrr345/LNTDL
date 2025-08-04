@@ -42,7 +42,7 @@ async function getSocialData() {
   }
 }
 
-export default async function SocialPage() {
+export default async function SocialPageRoute() {
   // Charger les données côté serveur
   const { socialLinks, settings } = await getSocialData();
 
