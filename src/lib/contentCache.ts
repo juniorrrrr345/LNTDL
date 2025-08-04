@@ -132,6 +132,17 @@ class ContentCache {
     } catch (e) {}
   }
 
+  updateQuestionsPage(page: { title: string; content: string }) {
+    if (!this.data.pages) {
+      this.data.pages = {};
+    }
+    this.data.pages.questions = page;
+    // Sauvegarder aussi dans localStorage séparément pour chargement instantané
+    try {
+      localStorage.setItem('questionsPage', JSON.stringify(page));
+    } catch (e) {}
+  }
+
 
 
   updateSettings(settings: any) {

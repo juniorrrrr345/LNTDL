@@ -15,7 +15,8 @@ export default function CachePreloader() {
           fetch('/api/settings', { cache: 'no-store' }),
           fetch('/api/social-links', { cache: 'no-store' }),
           fetch('/api/pages/info', { cache: 'no-store' }),
-          fetch('/api/pages/contact', { cache: 'no-store' })
+          fetch('/api/pages/contact', { cache: 'no-store' }),
+          fetch('/api/pages/questions', { cache: 'no-store' })
         ];
 
         const results = await Promise.allSettled(promises);

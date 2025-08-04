@@ -9,10 +9,11 @@ interface PageContent {
 }
 
 export default function PagesManager() {
-  const [activeTab, setActiveTab] = useState<'info' | 'contact'>('info');
+  const [activeTab, setActiveTab] = useState<'info' | 'contact' | 'questions'>('info');
   const [pageContent, setPageContent] = useState({
     info: { title: 'Page Info', content: '' },
-    contact: { title: 'Page Contact', content: '' }
+    contact: { title: 'Page Contact', content: '' },
+    questions: { title: 'Page Questions', content: '' }
   });
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<string>('');
@@ -24,7 +25,7 @@ export default function PagesManager() {
       setIsLoading(true);
       console.log('📄 Chargement des pages...');
       
-      const [infoRes, contactRes] = await Promise.all([
+      const [infoRes, contactRes, questionsRes] = await Promise.all([
         fetch('/api/pages/info').catch(err => {
           console.error('Erreur fetch info:', err);
           return { ok: false, json: () => ({ title: 'À propos', content: '' }) };
@@ -32,19 +33,25 @@ export default function PagesManager() {
         fetch('/api/pages/contact').catch(err => {
           console.error('Erreur fetch contact:', err);
           return { ok: false, json: () => ({ title: 'Contact', content: '' }) };
+        }),
+        fetch('/api/pages/questions').catch(err => {
+          console.error('Erreur fetch questions:', err);
+          return { ok: false, json: () => ({ title: 'Questions', content: '' }) };
         })
       ]);
       
-      console.log('Réponses API:', { info: infoRes.ok, contact: contactRes.ok });
+      console.log('Réponses API:', { info: infoRes.ok, contact: contactRes.ok, questions: questionsRes.ok });
       
-      const [infoData, contactData] = await Promise.all([
+      const [infoData, contactData, questionsData] = await Promise.all([
         infoRes.json(),
-        contactRes.json()
+        contactRes.json(),
+        questionsRes.json()
       ]);
       
       console.log('Données reçues:', { 
         info: infoData.title, 
-        contact: contactData.title 
+        contact: contactData.title,
+        questions: questionsData.title 
       });
       
       setPageContent({
@@ -55,6 +62,10 @@ export default function PagesManager() {
         contact: {
           title: contactData.title || 'Contact',
           content: contactData.content || ''
+        },
+        questions: {
+          title: questionsData.title || 'Questions',
+          content: questionsData.content || ''
         }
       });
     } catch (error) {
@@ -177,6 +188,14 @@ export default function PagesManager() {
           }`}
         >
           📞 Page Contact
+        </button>
+        <button
+          onClick={() => setActiveTab('questions')}
+          className={`pb-3 px-1 text-sm font-medium transition-colors ${
+            activeTab === 'questions' ? 'text-white border-b-2 border-white' : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          ❓ Page Questions
         </button>
       </div>
 
