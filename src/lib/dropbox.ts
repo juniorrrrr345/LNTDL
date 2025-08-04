@@ -25,6 +25,31 @@ const dbx = new Dropbox({
   fetch: fetch
 });
 
+// Fonction pour convertir un lien Dropbox en lien direct
+function convertToDirectLink(shareLink: string): string {
+  // Méthode 1: Remplacer ?dl=0 par ?raw=1
+  let directLink = shareLink.replace('?dl=0', '?raw=1');
+  
+  // Méthode 2: Si ça ne marche pas, utiliser dl=1
+  if (directLink === shareLink) {
+    directLink = shareLink.replace('?dl=0', '?dl=1');
+  }
+  
+  // Méthode 3: Si pas de paramètre, ajouter ?raw=1
+  if (!directLink.includes('?')) {
+    directLink = directLink + '?raw=1';
+  }
+  
+  // Méthode 4: Utiliser le format direct de Dropbox
+  if (directLink.includes('www.dropbox.com')) {
+    directLink = directLink.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+    directLink = directLink.replace(/[?&]dl=[01]/, '');
+    directLink = directLink.replace(/[?&]raw=[01]/, '');
+  }
+  
+  return directLink;
+}
+
 // Fonction pour uploader un fichier
 export async function uploadToDropbox(file: Buffer, fileName: string, folder: string = '/media'): Promise<string> {
   try {
@@ -50,8 +75,12 @@ export async function uploadToDropbox(file: Buffer, fileName: string, folder: st
     });
 
     // Convertir le lien Dropbox en lien direct
-    // Remplacer ?dl=0 par ?raw=1 pour un accès direct
-    const directLink = shareLink.result.url.replace('?dl=0', '?raw=1');
+    const directLink = convertToDirectLink(shareLink.result.url);
+    
+    console.log('🔗 Lien Dropbox généré:', {
+      original: shareLink.result.url,
+      direct: directLink
+    });
     
     return directLink;
   } catch (error: any) {
@@ -63,7 +92,9 @@ export async function uploadToDropbox(file: Buffer, fileName: string, folder: st
       });
       
       if (links.result.links.length > 0) {
-        return links.result.links[0].url.replace('?dl=0', '?raw=1');
+        const directLink = convertToDirectLink(links.result.links[0].url);
+        console.log('🔗 Lien Dropbox existant récupéré:', directLink);
+        return directLink;
       }
     }
     
@@ -90,6 +121,18 @@ export async function listDropboxFiles(folder: string = '/media'): Promise<any[]
   } catch (error) {
     console.error('Erreur listing Dropbox:', error);
     throw error;
+  }
+}
+
+// Fonction pour tester la connexion Dropbox
+export async function testDropboxConnection(): Promise<boolean> {
+  try {
+    await dbx.usersGetCurrentAccount();
+    console.log('✅ Connexion Dropbox OK');
+    return true;
+  } catch (error) {
+    console.error('❌ Erreur connexion Dropbox:', error);
+    return false;
   }
 }
 
