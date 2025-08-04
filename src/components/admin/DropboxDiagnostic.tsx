@@ -17,11 +17,19 @@ export default function DropboxDiagnostic({ className = '' }: DropboxDiagnosticP
     setResult(null);
 
     try {
-      const response = await fetch('/api/test-dropbox');
+      // Test avec un lien Dropbox exemple
+      const testUrl = 'https://www.dropbox.com/s/xxxxx/test.jpg?dl=0';
+      const response = await fetch(`/api/convert-dropbox-link?url=${encodeURIComponent(testUrl)}`);
       const data = await response.json();
 
       if (data.success) {
-        setResult(data);
+        setResult({
+          success: true,
+          message: '✅ Conversion des liens Dropbox fonctionne',
+          testUrl: data.directUrl,
+          originalUrl: data.originalUrl,
+          type: data.type
+        });
       } else {
         setError(data.error || 'Erreur inconnue');
       }
@@ -38,13 +46,25 @@ export default function DropboxDiagnostic({ className = '' }: DropboxDiagnosticP
     setResult(null);
 
     try {
-      const response = await fetch('/api/fix-dropbox-links', {
-        method: 'POST'
+      // Test de conversion avec un exemple
+      const testUrl = 'https://www.dropbox.com/s/xxxxx/video.mp4?dl=0';
+      const response = await fetch('/api/convert-dropbox-link', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: testUrl })
       });
       const data = await response.json();
 
       if (data.success) {
-        setResult(data);
+        setResult({
+          success: true,
+          message: '✅ Correction des liens Dropbox fonctionne',
+          originalUrl: data.originalUrl,
+          directUrl: data.directUrl,
+          type: data.type
+        });
       } else {
         setError(data.error || 'Erreur inconnue');
       }
@@ -85,7 +105,7 @@ export default function DropboxDiagnostic({ className = '' }: DropboxDiagnosticP
   return (
     <div className={`dropbox-diagnostic ${className}`}>
       <div className="bg-gray-900 border border-white/20 rounded-xl p-4 mb-4">
-        <h3 className="text-lg font-bold text-white mb-4">🔧 Diagnostic Dropbox</h3>
+        <h3 className="text-lg font-bold text-white mb-4">🔧 Diagnostic Conversion Dropbox</h3>
         
         <div className="flex gap-3 mb-4">
           <button
@@ -93,7 +113,7 @@ export default function DropboxDiagnostic({ className = '' }: DropboxDiagnosticP
             disabled={isLoading}
             className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition-colors"
           >
-            {isLoading ? 'Test en cours...' : 'Tester la connexion Dropbox'}
+            {isLoading ? 'Test en cours...' : 'Tester la conversion Dropbox'}
           </button>
           
           <button
@@ -147,9 +167,9 @@ export default function DropboxDiagnostic({ className = '' }: DropboxDiagnosticP
           </div>
         </div>
 
-        <div className="bg-yellow-900 border border-yellow-500 text-yellow-200 p-3 rounded-lg mt-4">
-          <strong>⚠️ Important:</strong> Les tokens Dropbox expirent après 4 heures. 
-          Si les images ne s'affichent plus, renouvelez votre token d'accès dans l'interface Dropbox.
+        <div className="bg-green-900 border border-green-500 text-green-200 p-3 rounded-lg mt-4">
+          <strong>✅ Solution:</strong> La conversion des liens Dropbox fonctionne maintenant sans token ! 
+          Plus besoin de renouveler les tokens, les liens sont convertis automatiquement.
         </div>
       </div>
     </div>
