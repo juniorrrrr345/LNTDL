@@ -1371,39 +1371,63 @@ export default function ProductsManager() {
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         Vidéo (optionnel) {formData.video && <span className="text-green-400">✅ Vidéo ajoutée</span>}
                       </label>
-                      <DropboxUploader
-                        onUploadSuccess={(url) => {
-                          updateField('video', url);
-                        }}
-                        type="video"
-                        accept="video/*"
-                        className="mb-3"
-                      />
-                      <input
-                        type="text"
-                        value={formData.video || ''}
-                        onChange={(e) => updateField('video', e.target.value)}
-                        className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
-                        placeholder="URL de la vidéo..."
-                      />
-                      {formData.video && (
-                        <video 
-                          src={formData.video} 
-                          className="w-full max-w-xs h-32 object-contain bg-black rounded border border-white/20 mt-2"
-                          controls
-                          muted
-                          playsInline
-                          onError={(e) => {
-                            console.error('Erreur vidéo modal:', formData.video);
-                            const container = e.currentTarget.parentElement;
-                            if (container) {
-                              const errorDiv = document.createElement('div');
-                              errorDiv.className = 'text-red-400 text-sm p-2 bg-red-900/20 rounded mt-2';
-                              errorDiv.textContent = '⚠️ Erreur vidéo';
-                              e.currentTarget.replaceWith(errorDiv);
+                      
+                      {/* Nouvelle galerie Dropbox pour vidéos */}
+                      <div className="mb-4">
+                        <DropboxMediaGallery
+                          onMediaChange={(media) => {
+                            if (media.length > 0) {
+                              const videoMedia = media.find(m => m.type === 'video');
+                              if (videoMedia) {
+                                updateField('video', videoMedia.url);
+                              }
                             }
                           }}
+                          initialMedia={formData.video ? [{
+                            id: 'current-video',
+                            url: formData.video,
+                            type: 'video',
+                            title: 'Vidéo actuelle'
+                          }] : []}
                         />
+                      </div>
+                      
+                      {/* Champ de saisie manuelle pour les liens Dropbox */}
+                      <div className="mb-3">
+                        <input
+                          type="text"
+                          value={formData.video || ''}
+                          onChange={(e) => updateField('video', e.target.value)}
+                          className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
+                          placeholder="Collez votre lien Dropbox vidéo ici..."
+                        />
+                        <p className="text-xs text-gray-400 mt-1">
+                          💡 Collez directement votre lien Dropbox, il sera automatiquement converti
+                        </p>
+                      </div>
+                      
+                      {/* Prévisualisation de la vidéo */}
+                      {formData.video && (
+                        <div className="mt-3">
+                          <h4 className="text-sm font-medium text-gray-300 mb-2">Aperçu de la vidéo :</h4>
+                          <video 
+                            src={formData.video} 
+                            className="w-full max-w-xs h-32 object-contain bg-black rounded border border-white/20"
+                            controls
+                            muted
+                            playsInline
+                            onError={(e) => {
+                              console.error('Erreur vidéo modal:', formData.video);
+                              const container = e.currentTarget.parentElement;
+                              if (container) {
+                                const errorDiv = document.createElement('div');
+                                errorDiv.className = 'text-red-400 text-sm p-2 bg-red-900/20 rounded mt-2';
+                                errorDiv.textContent = '⚠️ Erreur vidéo - Vérifiez que le lien Dropbox est public et utilise le bon format';
+                                e.currentTarget.replaceWith(errorDiv);
+                              }
+                            }}
+                          />
+                        </div>
                       )}
                     </div>
                   </div>
