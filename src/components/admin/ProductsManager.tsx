@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import GalleryUploader from './GalleryUploader';
+import SimpleGalleryUploader from './SimpleGalleryUploader';
 
 interface Product {
   _id?: string;
@@ -1308,9 +1309,9 @@ export default function ProductsManager() {
                         Image du produit {formData.image && <span className="text-green-400">✅ Image ajoutée</span>}
                       </label>
                       
-                      {/* Upload depuis la galerie téléphone vers Dropbox */}
+                      {/* Upload depuis la galerie téléphone */}
                       <div className="mb-4">
-                        <GalleryUploader
+                        <SimpleGalleryUploader
                           onMediaSelected={(url, type) => {
                             if (type === 'image') {
                               updateField('image', url);
@@ -1343,9 +1344,9 @@ export default function ProductsManager() {
                         Vidéo (optionnel) {formData.video && <span className="text-green-400">✅ Vidéo ajoutée</span>}
                       </label>
                       
-                      {/* Upload depuis la galerie téléphone vers Dropbox */}
+                      {/* Upload depuis la galerie téléphone */}
                       <div className="mb-4">
-                        <GalleryUploader
+                        <SimpleGalleryUploader
                           onMediaSelected={(url, type) => {
                             if (type === 'video') {
                               updateField('video', url);
