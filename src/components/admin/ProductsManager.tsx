@@ -1124,29 +1124,23 @@ export default function ProductsManager() {
                       />
                     </div>
                     
-                    {/* Sélection depuis la galerie téléphone */}
+                    {/* Upload depuis la galerie téléphone */}
                     <div className="mb-3">
-                      <div className="text-xs text-blue-400 mb-2">📱 Galerie téléphone - Sélection directe</div>
-                      <input
-                        type="file"
-                        accept="video/*"
-                        capture="environment"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            // Créer un URL temporaire pour prévisualisation
-                            const videoUrl = URL.createObjectURL(file);
-                            updateField('video', videoUrl);
-                            
-                            // Optionnel : Upload vers Dropbox automatiquement
-                            // Ici vous pourriez ajouter l'upload automatique
-                            console.log('📱 Vidéo sélectionnée depuis la galerie:', file.name);
+                      <div className="text-xs text-blue-400 mb-2">📱 Galerie téléphone - Upload automatique</div>
+                      <MediaUploader
+                        onMediaSelected={(url, type) => {
+                          if (type === 'video') {
+                            updateField('video', url);
                           }
                         }}
-                        className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
+                        accept="video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv"
+                        maxSize={50} // Augmenté pour les vidéos
+                        className="mb-2"
+                        showGalleryButton={true}
+                        galleryButtonText="📱 Sélectionner depuis la galerie"
                       />
                       <p className="text-xs text-gray-400 mt-1">
-                        📱 Cliquez pour sélectionner une vidéo depuis votre galerie téléphone
+                        📱 Sélectionnez une vidéo depuis votre galerie téléphone
                       </p>
                     </div>
                     

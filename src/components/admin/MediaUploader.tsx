@@ -6,13 +6,17 @@ interface MediaUploaderProps {
   acceptedTypes?: string;
   maxSize?: number;
   className?: string;
+  showGalleryButton?: boolean;
+  galleryButtonText?: string;
 }
 
 export default function MediaUploader({ 
   onMediaSelected, 
   acceptedTypes = "image/*,video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv",
   maxSize = 10, // Limite par défaut réduite
-  className = ""
+  className = "",
+  showGalleryButton = false,
+  galleryButtonText = "📱 Galerie"
 }: MediaUploaderProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
