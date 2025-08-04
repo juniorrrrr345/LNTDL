@@ -23,7 +23,7 @@ export default function HomePage() {
   }, [router]);
   
   // États pour les données - Initialiser avec des valeurs par défaut
-  const [loading, setLoading] = useState(false); // Pas de loading par défaut // Toujours true au départ
+  const [loading, setLoading] = useState(true); // Remettre le loading au départ
   
   // Gérer la logique de première visite côté client uniquement
   useEffect(() => {
@@ -151,8 +151,10 @@ export default function HomePage() {
     
     loadFreshData();
     
-    // Pas de délai de chargement artificiel
-    setLoading(false);
+    // Cacher le chargement après un délai pour bien voir l'animation
+    const loadingTimeout = setTimeout(() => {
+      setLoading(false);
+    }, 3000); // 3 secondes pour voir l'animation
     
     // Rafraîchir les données toutes les secondes pour synchronisation temps réel
     const interval = setInterval(() => {
@@ -162,6 +164,7 @@ export default function HomePage() {
     // Écouter les changements de paramètres
     
     return () => {
+      clearTimeout(loadingTimeout);
       clearInterval(interval);
     };
   }, []);
@@ -216,7 +219,7 @@ export default function HomePage() {
   // Écran de chargement avec fond de thème de la boutique
   if (loading) {
     return (
-      <div className="main-container">
+      <div className="main-container" style={{ minHeight: '100vh', backgroundColor: 'black' }}>
         <div className="global-overlay"></div>
         <div className="content-layer">
           <div className="min-h-screen flex items-center justify-center p-4">
