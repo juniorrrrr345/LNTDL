@@ -37,6 +37,8 @@ export default function ProductsManager() {
     isActive: true
   });
   const [activeTab, setActiveTab] = useState<'infos' | 'media' | 'prix'>('infos');
+  // Sauvegarder temporairement les médias pour éviter la perte
+  const [tempMediaStorage, setTempMediaStorage] = useState<{image?: string, video?: string}>({});
   // États locaux pour les champs de prix pour éviter la perte de focus
   const [priceInputs, setPriceInputs] = useState<{ [key: string]: string }>({});
   // États locaux pour les quantités (séparés pour éviter les conflits)
@@ -49,6 +51,29 @@ export default function ProductsManager() {
   useEffect(() => {
     loadData();
   }, []);
+  
+  // Debug: Surveiller les changements de formData
+  useEffect(() => {
+    console.log('🔄 FormData a changé:', {
+      name: formData.name,
+      image: formData.image,
+      video: formData.video,
+      hasImage: !!formData.image,
+      hasVideo: !!formData.video
+    });
+  }, [formData]);
+  
+  // Restaurer les médias depuis le storage temporaire si nécessaire
+  useEffect(() => {
+    if (tempMediaStorage.image && !formData.image) {
+      console.log('🔄 Restauration image depuis storage temporaire');
+      setFormData(prev => ({ ...prev, image: tempMediaStorage.image }));
+    }
+    if (tempMediaStorage.video && !formData.video) {
+      console.log('🔄 Restauration vidéo depuis storage temporaire');
+      setFormData(prev => ({ ...prev, video: tempMediaStorage.video }));
+    }
+  }, [activeTab]); // Se déclenche quand on change d'onglet
 
   const loadData = async () => {
     try {
@@ -114,6 +139,11 @@ export default function ProductsManager() {
       ...product,
       prices: { ...product.prices }
     });
+    // Initialiser le storage temporaire avec les médias existants
+    setTempMediaStorage({
+      image: product.image,
+      video: product.video
+    });
     // Synchroniser les états locaux des prix
     const priceStrings: { [key: string]: string } = {};
     const quantityStrings: { [key: string]: string } = {};
@@ -149,6 +179,8 @@ export default function ProductsManager() {
       description: '',
       isActive: true
     });
+    // Réinitialiser le storage temporaire
+    setTempMediaStorage({});
     // Aucun prix par défaut - interface complètement vide
     setPriceInputs({});
     setQuantityInputs({});
@@ -192,10 +224,7 @@ export default function ProductsManager() {
     
     console.log('💾 Prix récupérés pour sauvegarde:', finalPrices);
     
-    setFormData(prev => ({
-      ...prev,
-      prices: finalPrices
-    }));
+    // Ne PAS écraser formData ici - on utilisera finalPrices directement dans la sauvegarde
   };
 
   const handleSave = async () => {
@@ -280,10 +309,19 @@ export default function ProductsManager() {
       // Utiliser les prix récupérés directement depuis les inputs
       const cleanedPrices = finalPrices;
 
+      // S'assurer que toutes les données sont présentes
       const cleanedFormData = {
-        ...formData,
+        name: formData.name,
+        farm: formData.farm,
+        category: formData.category,
+        image: formData.image || '',
+        video: formData.video || '',
+        description: formData.description || '',
+        isActive: formData.isActive !== false,
         prices: cleanedPrices
       };
+      
+      console.log('🔍 Données finales pour sauvegarde:', cleanedFormData);
 
       const url = editingProduct ? `/api/products/${editingProduct._id}` : '/api/products';
       const method = editingProduct ? 'PUT' : 'POST';
@@ -452,7 +490,22 @@ export default function ProductsManager() {
 
   const updateField = (field: keyof Product, value: any) => {
     console.log(`📝 UpdateField: ${field} = ${value}`);
-    setFormData(prev => ({ ...prev, [field]: value }));
+    
+    // Sauvegarder les médias dans le storage temporaire
+    if (field === 'image' || field === 'video') {
+      setTempMediaStorage(prev => ({ ...prev, [field]: value }));
+    }
+    
+    setFormData(prev => {
+      const newData = { ...prev, [field]: value };
+      console.log('📊 Nouvel état formData après update:', {
+        name: newData.name,
+        image: newData.image,
+        video: newData.video,
+        prices: newData.prices
+      });
+      return newData;
+    });
   };
 
   const updatePrice = useCallback((priceKey: string, value: string) => {
