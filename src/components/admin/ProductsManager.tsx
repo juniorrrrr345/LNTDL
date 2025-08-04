@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import MediaUploader from './MediaUploader';
-import DropboxUploader from './DropboxUploader';
 import DropboxDiagnostic from './DropboxDiagnostic';
 import DropboxMediaGallery from './DropboxMediaGallery';
 
@@ -1041,36 +1040,39 @@ export default function ProductsManager() {
                       Image du produit {formData.image && <span className="text-green-400">✅ Image ajoutée</span>}
                     </label>
                     
-                    <div className="bg-gray-800/50 border border-white/10 rounded-lg p-4 mb-3">
-                      <div className="text-sm text-gray-300 mb-3 font-medium">Choisir la méthode d'upload :</div>
-                      
-                      {/* Upload Dropbox (recommandé) */}
-                      <div className="mb-3">
-                        <div className="text-xs text-green-400 mb-2">✅ Recommandé - Hébergement cloud</div>
-                        <DropboxUploader
-                          onUploadSuccess={(url) => {
-                            updateField('image', url);
-                          }}
-                          type="image"
-                          accept="image/*"
-                          className="mb-2"
-                        />
-                      </div>
-                      
-                      {/* Upload base64 (pour petites images) */}
-                      <div className="mb-3">
-                        <div className="text-xs text-yellow-400 mb-2">⚠️ Base64 - Petites images seulement</div>
-                        <MediaUploader
-                          onMediaSelected={(url, type) => {
-                            if (type === 'image') {
-                              updateField('image', url);
+                    {/* Nouvelle galerie Dropbox pour images */}
+                    <div className="mb-4">
+                      <DropboxMediaGallery
+                        onMediaChange={(media) => {
+                          if (media.length > 0) {
+                            const imageMedia = media.find(m => m.type === 'image');
+                            if (imageMedia) {
+                              updateField('image', imageMedia.url);
                             }
-                          }}
-                          acceptedTypes="image/*"
-                          maxSize={5}
-                          className="mb-2"
-                        />
-                      </div>
+                          }
+                        }}
+                        initialMedia={formData.image ? [{
+                          id: 'current-image',
+                          url: formData.image,
+                          type: 'image',
+                          title: 'Image actuelle'
+                        }] : []}
+                      />
+                    </div>
+                    
+                    {/* Upload base64 (pour petites images) */}
+                    <div className="mb-3">
+                      <div className="text-xs text-yellow-400 mb-2">⚠️ Base64 - Petites images seulement</div>
+                      <MediaUploader
+                        onMediaSelected={(url, type) => {
+                          if (type === 'image') {
+                            updateField('image', url);
+                          }
+                        }}
+                        acceptedTypes="image/*"
+                        maxSize={5}
+                        className="mb-2"
+                      />
                     </div>
                     
                     {/* Champ URL manuel */}
@@ -1080,7 +1082,7 @@ export default function ProductsManager() {
                       value={formData.image || ''}
                       onChange={(e) => updateField('image', e.target.value)}
                       className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
-                      placeholder="https://... ou data:image/..."
+                      placeholder="Collez votre lien Dropbox image ici..."
                     />
                     
                     {/* Préview de l'image */}
@@ -1104,36 +1106,39 @@ export default function ProductsManager() {
                       Vidéo du produit (optionnel) {formData.video && <span className="text-green-400">✅ Vidéo ajoutée</span>}
                     </label>
                     
-                    <div className="bg-gray-800/50 border border-white/10 rounded-lg p-4 mb-3">
-                      <div className="text-sm text-gray-300 mb-3 font-medium">Choisir la méthode d'upload :</div>
-                      
-                      {/* Upload Dropbox (recommandé pour vidéos) */}
-                      <div className="mb-3">
-                        <div className="text-xs text-green-400 mb-2">✅ Recommandé - Hébergement cloud illimité</div>
-                        <DropboxUploader
-                          onUploadSuccess={(url) => {
-                            updateField('video', url);
-                          }}
-                          type="video"
-                          accept="video/*,.mov,.avi,.3gp"
-                          className="mb-2"
-                        />
-                      </div>
-                      
-                      {/* Upload base64 (très limité) */}
-                      <div className="mb-3">
-                        <div className="text-xs text-red-400 mb-2">❌ Base64 - Cause erreur 413 (non recommandé)</div>
-                        <MediaUploader
-                          onMediaSelected={(url, type) => {
-                            if (type === 'video') {
-                              updateField('video', url);
+                    {/* Nouvelle galerie Dropbox pour vidéos */}
+                    <div className="mb-4">
+                      <DropboxMediaGallery
+                        onMediaChange={(media) => {
+                          if (media.length > 0) {
+                            const videoMedia = media.find(m => m.type === 'video');
+                            if (videoMedia) {
+                              updateField('video', videoMedia.url);
                             }
-                          }}
-                          accept="video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv"
-                          maxSize={5} // Très réduit pour éviter erreur 413
-                          className="mb-2"
-                        />
-                      </div>
+                          }
+                        }}
+                        initialMedia={formData.video ? [{
+                          id: 'current-video',
+                          url: formData.video,
+                          type: 'video',
+                          title: 'Vidéo actuelle'
+                        }] : []}
+                      />
+                    </div>
+                    
+                    {/* Upload base64 (très limité) */}
+                    <div className="mb-3">
+                      <div className="text-xs text-red-400 mb-2">❌ Base64 - Cause erreur 413 (non recommandé)</div>
+                      <MediaUploader
+                        onMediaSelected={(url, type) => {
+                          if (type === 'video') {
+                            updateField('video', url);
+                          }
+                        }}
+                        accept="video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv"
+                        maxSize={5} // Très réduit pour éviter erreur 413
+                        className="mb-2"
+                      />
                     </div>
                     
                     {/* Champ URL manuel */}
@@ -1143,7 +1148,7 @@ export default function ProductsManager() {
                       value={formData.video || ''}
                       onChange={(e) => updateField('video', e.target.value)}
                       className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
-                      placeholder="https://... ou data:video/..."
+                      placeholder="Collez votre lien Dropbox vidéo ici..."
                     />
                     
                     {/* Préview de la vidéo */}
@@ -1343,20 +1348,33 @@ export default function ProductsManager() {
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         Image du produit {formData.image && <span className="text-green-400">✅ Image ajoutée</span>}
                       </label>
-                      <DropboxUploader
-                        onUploadSuccess={(url) => {
-                          updateField('image', url);
-                        }}
-                        type="image"
-                        accept="image/*"
-                        className="mb-3"
-                      />
+                      
+                      {/* Nouvelle galerie Dropbox pour images */}
+                      <div className="mb-4">
+                        <DropboxMediaGallery
+                          onMediaChange={(media) => {
+                            if (media.length > 0) {
+                              const imageMedia = media.find(m => m.type === 'image');
+                              if (imageMedia) {
+                                updateField('image', imageMedia.url);
+                              }
+                            }
+                          }}
+                          initialMedia={formData.image ? [{
+                            id: 'current-image',
+                            url: formData.image,
+                            type: 'image',
+                            title: 'Image actuelle'
+                          }] : []}
+                        />
+                      </div>
+                      
                       <input
                         type="text"
                         value={formData.image || ''}
                         onChange={(e) => updateField('image', e.target.value)}
                         className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
-                        placeholder="URL de l'image..."
+                        placeholder="Collez votre lien Dropbox image ici..."
                       />
                       {formData.image && (
                         <img 

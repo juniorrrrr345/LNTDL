@@ -295,6 +295,14 @@ export default function PublicPage() {
 />
 ```
 
+### ✅ **Migration complète effectuée :**
+
+- **Supprimé** l'ancien composant `DropboxUploader.tsx`
+- **Remplacé** toutes les références par `DropboxMediaGallery`
+- **Mis à jour** les placeholders pour indiquer "Collez votre lien Dropbox"
+- **Ajouté** la conversion automatique des liens
+- **Supprimé** la dépendance aux tokens Dropbox
+
 ### 2. Corriger les liens existants
 
 ```tsx
