@@ -529,11 +529,8 @@ export default function ProductsManager() {
       }
     });
 
-    // Si aucun prix, ajouter au moins une ligne par défaut
-    if (Object.keys(allPrices).length === 0) {
-      console.log('⚠️ Aucun prix trouvé, ajout d\'une ligne par défaut');
-      allPrices['3g'] = undefined;
-    }
+    // Ne pas ajouter de prix par défaut si aucun prix n'est défini
+    // L'utilisateur ajoutera les prix qu'il souhaite
     
     const result = Object.entries(allPrices);
     console.log('🔍 getAllPriceEntries résultat final:', result);
@@ -755,13 +752,22 @@ export default function ProductsManager() {
                   
                   {/* Prix compacts */}
                   <div className="flex flex-wrap gap-1">
-                    {Object.entries(product.prices || {}).slice(0, 3).map(([key, value]) => (
+                                      {Object.entries(product.prices || {})
+                    .filter(([, value]) => value !== undefined && value !== null && value !== '' && value !== 0)
+                    .slice(0, 3)
+                    .map(([key, value]) => (
                       <span key={key} className="bg-white/10 text-white text-xs px-2 py-1 rounded">
                         {key}: {value}€
                       </span>
                     ))}
-                    {Object.keys(product.prices || {}).length > 3 && (
-                      <span className="text-gray-500 text-xs">+{Object.keys(product.prices).length - 3}</span>
+                    {Object.entries(product.prices || {})
+                      .filter(([, value]) => value !== undefined && value !== null && value !== '' && value !== 0)
+                      .length > 3 && (
+                      <span className="text-gray-500 text-xs">
+                        +{Object.entries(product.prices || {})
+                          .filter(([, value]) => value !== undefined && value !== null && value !== '' && value !== 0)
+                          .length - 3}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -826,7 +832,10 @@ export default function ProductsManager() {
               {/* Prix principaux */}
               <div className="mb-3">
                 <div className="grid grid-cols-2 gap-1 text-xs">
-                  {Object.entries(product.prices).slice(0, 4).map(([key, value]) => (
+                  {Object.entries(product.prices || {})
+                  .filter(([, value]) => value !== undefined && value !== null && value !== '' && value !== 0)
+                  .slice(0, 4)
+                  .map(([key, value]) => (
                     <div key={key} className="flex justify-between text-gray-300">
                       <span>{key}</span>
                       <span className="font-medium">{value}€</span>
