@@ -1124,19 +1124,30 @@ export default function ProductsManager() {
                       />
                     </div>
                     
-                    {/* Upload base64 (très limité) */}
+                    {/* Sélection depuis la galerie téléphone */}
                     <div className="mb-3">
-                      <div className="text-xs text-red-400 mb-2">❌ Base64 - Cause erreur 413 (non recommandé)</div>
-                      <MediaUploader
-                        onMediaSelected={(url, type) => {
-                          if (type === 'video') {
-                            updateField('video', url);
+                      <div className="text-xs text-blue-400 mb-2">📱 Galerie téléphone - Sélection directe</div>
+                      <input
+                        type="file"
+                        accept="video/*"
+                        capture="environment"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            // Créer un URL temporaire pour prévisualisation
+                            const videoUrl = URL.createObjectURL(file);
+                            updateField('video', videoUrl);
+                            
+                            // Optionnel : Upload vers Dropbox automatiquement
+                            // Ici vous pourriez ajouter l'upload automatique
+                            console.log('📱 Vidéo sélectionnée depuis la galerie:', file.name);
                           }
                         }}
-                        accept="video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv"
-                        maxSize={5} // Très réduit pour éviter erreur 413
-                        className="mb-2"
+                        className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
                       />
+                      <p className="text-xs text-gray-400 mt-1">
+                        📱 Cliquez pour sélectionner une vidéo depuis votre galerie téléphone
+                      </p>
                     </div>
                     
                     {/* Champ URL manuel */}
