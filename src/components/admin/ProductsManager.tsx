@@ -6,6 +6,7 @@ import LocalGalleryUploader from './LocalGalleryUploader';
 import HybridGalleryUploader from './HybridGalleryUploader';
 import PersistentGalleryUploader from './PersistentGalleryUploader';
 import SharedGalleryUploader from './SharedGalleryUploader';
+import ImgBBGalleryUploader from './ImgBBGalleryUploader';
 
 interface Product {
   _id?: string;
@@ -1044,14 +1045,14 @@ export default function ProductsManager() {
                     
                     {/* Upload depuis la galerie téléphone */}
                     <div className="mb-4">
-                      <SharedGalleryUploader
+                      <ImgBBGalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'image') {
                             updateField('image', url);
                           }
                         }}
                         acceptedTypes="image/*"
-                        maxSize={50}
+                        maxSize={32}
                         buttonText="📱 Sélectionner image depuis la galerie"
                       />
                     </div>
@@ -1100,14 +1101,14 @@ export default function ProductsManager() {
                     
                     {/* Upload depuis la galerie téléphone */}
                     <div className="mb-4">
-                      <SharedGalleryUploader
+                      <ImgBBGalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'video') {
                             updateField('video', url);
                           }
                         }}
                         acceptedTypes="video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv"
-                        maxSize={150}
+                        maxSize={32}
                         buttonText="📱 Sélectionner vidéo depuis la galerie"
                       />
                     </div>
