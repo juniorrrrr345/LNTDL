@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import MediaUploader from './MediaUploader';
-import DropboxMediaGallery from './DropboxMediaGallery';
+import GalleryUploader from './GalleryUploader';
 
 interface Product {
   _id?: string;
@@ -1033,55 +1032,36 @@ export default function ProductsManager() {
                 </div>
 
                 <div className="space-y-4">
-                  <div>
+                                    <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       Image du produit {formData.image && <span className="text-green-400">✅ Image ajoutée</span>}
                     </label>
                     
-                    {/* Nouvelle galerie Dropbox pour images */}
+                    {/* Upload depuis la galerie téléphone vers Dropbox */}
                     <div className="mb-4">
-                      <DropboxMediaGallery
-                        onMediaChange={(media) => {
-                          if (media.length > 0) {
-                            const imageMedia = media.find(m => m.type === 'image');
-                            if (imageMedia) {
-                              updateField('image', imageMedia.url);
-                            }
-                          }
-                        }}
-                        initialMedia={formData.image ? [{
-                          id: 'current-image',
-                          url: formData.image,
-                          type: 'image',
-                          title: 'Image actuelle'
-                        }] : []}
-                      />
-                    </div>
-                    
-                    {/* Upload base64 (pour petites images) */}
-                    <div className="mb-3">
-                      <div className="text-xs text-yellow-400 mb-2">⚠️ Base64 - Petites images seulement</div>
-                      <MediaUploader
+                      <GalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'image') {
                             updateField('image', url);
                           }
                         }}
                         acceptedTypes="image/*"
-                        maxSize={5}
-                        className="mb-2"
+                        maxSize={50}
+                        buttonText="📱 Sélectionner image depuis la galerie"
                       />
                     </div>
                     
-                    {/* Champ URL manuel */}
-                    <div className="text-sm text-gray-400 mb-2">Ou entrer une URL manuellement :</div>
-                    <input
-                      type="text"
-                      value={formData.image || ''}
-                      onChange={(e) => updateField('image', e.target.value)}
-                      className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
-                      placeholder="Collez votre lien Dropbox image ici..."
-                    />
+                    {/* Champ URL manuel pour liens Dropbox */}
+                    <div className="mb-3">
+                      <div className="text-sm text-gray-400 mb-2">Ou collez un lien Dropbox :</div>
+                      <input
+                        type="text"
+                        value={formData.image || ''}
+                        onChange={(e) => updateField('image', e.target.value)}
+                        className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
+                        placeholder="https://www.dropbox.com/s/xxxxx/image.jpg?dl=0"
+                      />
+                    </div>
                     
                     {/* Préview de l'image */}
                     {formData.image && (
@@ -1104,55 +1084,31 @@ export default function ProductsManager() {
                       Vidéo du produit (optionnel) {formData.video && <span className="text-green-400">✅ Vidéo ajoutée</span>}
                     </label>
                     
-                    {/* Nouvelle galerie Dropbox pour vidéos */}
+                    {/* Upload depuis la galerie téléphone vers Dropbox */}
                     <div className="mb-4">
-                      <DropboxMediaGallery
-                        onMediaChange={(media) => {
-                          if (media.length > 0) {
-                            const videoMedia = media.find(m => m.type === 'video');
-                            if (videoMedia) {
-                              updateField('video', videoMedia.url);
-                            }
-                          }
-                        }}
-                        initialMedia={formData.video ? [{
-                          id: 'current-video',
-                          url: formData.video,
-                          type: 'video',
-                          title: 'Vidéo actuelle'
-                        }] : []}
-                      />
-                    </div>
-                    
-                    {/* Upload depuis la galerie téléphone */}
-                    <div className="mb-3">
-                      <div className="text-xs text-blue-400 mb-2">📱 Galerie téléphone - Upload automatique</div>
-                      <MediaUploader
+                      <GalleryUploader
                         onMediaSelected={(url, type) => {
                           if (type === 'video') {
                             updateField('video', url);
                           }
                         }}
-                        accept="video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv"
-                        maxSize={50} // Augmenté pour les vidéos
-                        className="mb-2"
-                        showGalleryButton={true}
-                        galleryButtonText="📱 Sélectionner depuis la galerie"
+                        acceptedTypes="video/*,.mov,.mp4,.avi,.3gp,.webm,.mkv"
+                        maxSize={150}
+                        buttonText="📱 Sélectionner vidéo depuis la galerie"
                       />
-                      <p className="text-xs text-gray-400 mt-1">
-                        📱 Sélectionnez une vidéo depuis votre galerie téléphone
-                      </p>
                     </div>
                     
-                    {/* Champ URL manuel */}
-                    <div className="text-sm text-gray-400 mb-2">Ou entrer une URL manuellement :</div>
-                    <input
-                      type="text"
-                      value={formData.video || ''}
-                      onChange={(e) => updateField('video', e.target.value)}
-                      className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
-                      placeholder="Collez votre lien Dropbox vidéo ici..."
-                    />
+                    {/* Champ URL manuel pour liens Dropbox */}
+                    <div className="mb-3">
+                      <div className="text-sm text-gray-400 mb-2">Ou collez un lien Dropbox :</div>
+                      <input
+                        type="text"
+                        value={formData.video || ''}
+                        onChange={(e) => updateField('video', e.target.value)}
+                        className="w-full bg-gray-800 border border-white/20 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/50"
+                        placeholder="https://www.dropbox.com/s/xxxxx/video.mp4?dl=0"
+                      />
+                    </div>
                     
                     {/* Préview de la vidéo */}
                     {formData.video && (
