@@ -18,7 +18,9 @@ export async function GET(
     if (!page) {
       const defaultPage = {
         slug: params.slug,
-        title: params.slug === 'info' ? 'À propos' : 'Contact',
+        title: params.slug === 'info' ? 'À propos' : 
+               params.slug === 'contact' ? 'Contact' : 
+               params.slug === 'questions' ? 'Questions' : params.slug,
         content: '',
         createdAt: new Date(),
         updatedAt: new Date()

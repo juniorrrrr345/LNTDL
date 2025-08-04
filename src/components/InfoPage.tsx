@@ -1,10 +1,33 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import contentCache from '@/lib/contentCache';
+
 interface InfoPageProps {
   content: string;
 }
 
-export default function InfoPage({ content }: InfoPageProps) {
+export default function InfoPage({ content: initialContent }: InfoPageProps) {
+  const [content, setContent] = useState(initialContent);
+  useEffect(() => {
+    // Charger depuis le cache si disponible
+    const cachedPage = contentCache.getPage('info');
+    if (cachedPage && cachedPage.content) {
+      setContent(cachedPage.content);
+    }
+
+    // Écouter les mises à jour du cache
+    const handleCacheUpdate = () => {
+      const updatedPage = contentCache.getPage('info');
+      if (updatedPage && updatedPage.content) {
+        setContent(updatedPage.content);
+      }
+    };
+
+    window.addEventListener('cacheUpdated', handleCacheUpdate);
+    return () => window.removeEventListener('cacheUpdated', handleCacheUpdate);
+  }, []);
+
   const parseMarkdown = (text: string) => {
     return text
       .replace(/^# (.+)$/gm, '<h1 class="text-2xl sm:text-3xl font-bold text-white mb-6 text-center">$1</h1>')

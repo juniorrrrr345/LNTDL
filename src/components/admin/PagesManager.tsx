@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import contentCache from '@/lib/contentCache';
 
 interface PageContent {
   slug: string;
@@ -110,9 +111,21 @@ export default function PagesManager() {
       if (result.success) {
         setSaveStatus('✅ Sauvegardé avec succès !');
         
+        // Mettre à jour le cache local immédiatement
+        const pageData = { title: page.title, content: page.content };
+        if (activeTab === 'info') {
+          contentCache.updateInfoPage(pageData);
+        } else if (activeTab === 'contact') {
+          contentCache.updateContactPage(pageData);
+        } else if (activeTab === 'questions') {
+          contentCache.updateQuestionsPage(pageData);
+        }
+        
         // Invalider le cache pour forcer le rechargement
         try {
           await fetch('/api/cache/invalidate', { method: 'POST' });
+          // Forcer le rafraîchissement du cache
+          await contentCache.forceRefresh();
         } catch (e) {
           console.log('Cache invalidation skipped');
         }
